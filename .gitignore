@@ -6,6 +6,8 @@ dist/
 # AI
 .agents/
 AGENTS.md
+specs/
+.tgrep/
 
 # dependencies
 node_modules/
