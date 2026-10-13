@@ -1,0 +1,41 @@
+---
+import { type Locale, useTranslations } from "../../i18n/utils";
+import SectionHeader from "../common/SectionHeader.astro";
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang, "overview");
+---
+
+<section
+    id="overview"
+    class="overview-section"
+    aria-labelledby="overview-heading"
+>
+    <SectionHeader
+        prefix="0x01"
+        title={t("heading")}
+        subtitle={t("subtitle")}
+        id="overview-heading"
+    />
+    <div class="overview-content">
+        <p>{t("content")}</p>
+    </div>
+</section>
+
+<style>
+    .overview-section {
+        /*padding: clamp(20px, 4vw, 36px);*/
+    }
+    .overview-content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        color: var(--colors-on-surface);
+        max-width: 70ch;
+        line-height: 1.7;
+    }
+</style>

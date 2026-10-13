@@ -1,0 +1,90 @@
+---
+import { type Locale, useTranslations } from "../../i18n/utils";
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer site-container">
+    <div class="footer-row">
+        <p class="footer-copyright">
+            © <time datetime={String(currentYear)}>{currentYear}</time> Werlyn.
+        </p>
+
+        <p class="footer-attribution">{t("footer.aiAttribution")}</p>
+
+        <div class="footer-action">
+            <a
+                href="#hero"
+                class="btn-cad btn-secondary btn-to-top"
+                aria-label={t("footer.backToTopAria")}
+            >
+                {t("footer.toTop")} ↑
+            </a>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .site-footer {
+        padding-block: 28px 40px;
+        border-top: 1px solid var(--colors-outline-subtle);
+        font-family: var(--font-mono-console);
+        font-size: var(--font-size-caption);
+        color: var(--colors-on-surface-muted);
+    }
+
+    .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .footer-copyright {
+        margin: 0;
+    }
+
+    .footer-attribution {
+        margin: 0;
+        text-align: center;
+    }
+
+    .footer-action {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-to-top {
+        min-height: 36px;
+        padding: 6px 14px;
+        font-size: var(--font-size-caption);
+        text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+        .footer-row {
+            flex-direction: column;
+            text-align: center;
+            gap: 14px;
+        }
+
+        .footer-attribution {
+            order: 2;
+        }
+
+        .footer-copyright {
+            order: 3;
+        }
+
+        .footer-action {
+            order: 1;
+        }
+    }
+</style>

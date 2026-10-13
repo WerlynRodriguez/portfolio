@@ -1,0 +1,92 @@
+---
+import { experienceRoles as enRoles } from '../../content/data/en';
+import { experienceRoles as esRoles } from '../../content/data/es';
+import { type Locale, useTranslations } from '../../i18n/utils';
+import SectionHeader from '../common/SectionHeader.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang, 'experience');
+const roles = lang === 'es' ? esRoles : enRoles;
+---
+
+<section
+    id="experience"
+    class="experience-section"
+    aria-labelledby="experience-heading"
+>
+    <SectionHeader
+        prefix="0x02"
+        title={t("heading")}
+        subtitle={t("subtitle")}
+        id="experience-heading"
+    />
+    <ol class="timeline-list">
+        {roles.map((role) => (
+            <li class="timeline-item">
+                <article class="timeline-card cad-frame">
+                    <header class="timeline-header separator">
+                        <h3 class="timeline-title">{role.title}</h3>
+                        <p class="timeline-period tag-cad">
+                            <time datetime={role.period.start}>
+                                {role.period.start}
+                            </time>
+                            <span> — </span>
+                            {role.period.end ? (
+                                <time datetime={role.period.end}>
+                                    {role.period.end}
+                                </time>
+                            ) : (
+                                <span>{t("present")}</span>
+                            )}
+                        </p>
+                    </header>
+                    <p class="timeline-desc">{role.description}</p>
+                </article>
+            </li>
+        ))}
+    </ol>
+</section>
+
+<style>
+    .experience-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .timeline-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .timeline-card {
+        padding: clamp(20px, 3vw, 28px);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .timeline-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        padding-bottom: 10px;
+    }
+    .timeline-title {
+        font-size: var(--font-size-h3);
+        margin: 0;
+    }
+    .timeline-desc {
+        color: var(--colors-on-surface-muted);
+        line-height: 1.6;
+        margin: 0;
+    }
+</style>

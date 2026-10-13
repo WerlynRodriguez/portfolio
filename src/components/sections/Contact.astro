@@ -1,0 +1,168 @@
+---
+import { Icon } from 'astro-icon/components';
+import { contactData as enContact } from '../../content/data/en';
+import { contactData as esContact } from '../../content/data/es';
+import { type Locale, useTranslations } from '../../i18n/utils';
+import ButtonCopy from '../common/ButtonCopy.astro';
+import SectionHeader from '../common/SectionHeader.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang, 'contact');
+const contact = lang === 'es' ? esContact : enContact;
+---
+
+<section id="contact" class="contact-section" aria-labelledby="contact-heading">
+    <SectionHeader
+        prefix="0x06"
+        title={t("heading")}
+        subtitle={t("subtitle")}
+        id="contact-heading"
+    />
+
+    <div class="contact-card cad-frame">
+        <div class="contact-actions">
+            <ButtonCopy
+                id="copy-email-btn"
+                class="contact-copy-btn"
+                data={contact.email}
+                prefixIcon="mail"
+                ariaLabel={t("copyEmailAria")}
+            />
+
+            <a
+                target="_blank"
+                href={`mailto:${contact.email}`}
+                class="btn-cad btn-mailto"
+                aria-label={t("mailtoAria")}
+            >
+                <span class="icon-wrap" aria-hidden="true">
+                    <Icon name="send" size={20} class="icon-send" />
+                </span>
+                <span class="mailto-label">{t("mailtoLabel")}</span>
+            </a>
+        </div>
+
+        <nav class="contact-socials" aria-label={t("socialsAria")}>
+            <ul class="socials-list">
+                {contact.socials.map((social) => (
+                    <li>
+                        <a
+                            href={social.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn-cad btn-secondary social-btn"
+                            aria-label={social.name}
+                        >
+                            <span class="icon-wrap" aria-hidden="true">
+                                <Icon
+                                    name={social.icon ?? social.name.toLowerCase()}
+                                    size={18}
+                                    class="icon-social"
+                                />
+                            </span>
+                            <span>{social.name}</span>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    </div>
+</section>
+
+<style>
+    .contact-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .contact-card {
+        padding: clamp(20px, 3.5vw, 32px);
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        background-color: var(--colors-surface);
+    }
+
+    .contact-actions {
+        display: flex;
+        align-items: stretch;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .contact-copy-btn {
+        flex: 1 1 340px;
+    }
+
+    .icon-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .btn-mailto {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 22px;
+    }
+
+    .contact-divider {
+        width: 100%;
+    }
+
+    .contact-socials {
+        width: 100%;
+    }
+
+    .socials-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .social-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: var(--font-size-caption);
+    }
+
+    @media (max-width: 640px) {
+        .contact-actions {
+            flex-direction: column;
+        }
+
+        .contact-copy-btn {
+            width: 100%;
+            flex: 1 1 auto;
+        }
+
+        .btn-mailto {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .socials-list {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .social-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>

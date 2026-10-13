@@ -1,0 +1,87 @@
+---
+import { academicItems as enAcademics } from '../../content/data/en';
+import { academicItems as esAcademics } from '../../content/data/es';
+import { type Locale, useTranslations } from '../../i18n/utils';
+import SectionHeader from '../common/SectionHeader.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang, 'academics');
+const items = lang === 'es' ? esAcademics : enAcademics;
+---
+
+<section
+    id="academics"
+    class="academics-section"
+    aria-labelledby="academics-heading"
+>
+    <SectionHeader
+        prefix="0x05"
+        title={t("heading")}
+        subtitle={t("subtitle")}
+        id="academics-heading"
+    />
+    <ul class="academics-list">
+        {items.map((item) => (
+            <li class="academics-item">
+                <article class="academics-card cad-frame">
+                    <header class="academics-header separator">
+                        <h3 class="academics-title">{item.title}</h3>
+                        <p class="academics-period tag-cad">
+                            <time datetime={item.period.start}>
+                                {item.period.start}
+                            </time>{" "}
+                            —{" "}
+                            <time datetime={item.period.end}>
+                                {item.period.end}
+                            </time>
+                        </p>
+                    </header>
+                    <p class="academics-desc">{item.description}</p>
+                </article>
+            </li>
+        ))}
+    </ul>
+</section>
+
+<style>
+    .academics-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .academics-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .academics-card {
+        padding: clamp(20px, 3vw, 28px);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .academics-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 10px;
+    }
+    .academics-title {
+        font-size: var(--font-size-h3);
+        margin: 0;
+    }
+    .academics-desc {
+        color: var(--colors-on-surface-muted);
+        line-height: 1.6;
+        margin: 0;
+    }
+</style>

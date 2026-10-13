@@ -1,0 +1,60 @@
+---
+interface Props {
+  prefix: string;
+  title: string;
+  subtitle: string;
+  id: string;
+  level?: 'h1' | 'h2';
+}
+
+const { prefix, title, subtitle, id, level = 'h2' } = Astro.props;
+const HeadingTag = level;
+---
+
+<div class="section-heading-block separator-dashed">
+    <span class="section-prefix" aria-hidden="true">
+        {prefix}
+    </span>
+    <HeadingTag id={id} class="section-title">
+        {title}
+    </HeadingTag>
+    <p class="section-subtitle">{subtitle}</p>
+</div>
+
+<style>
+    .section-heading-block {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+    }
+
+    .section-prefix {
+        font-family: var(--font-mono-console);
+        font-size: var(--font-size-caption);
+        color: var(--colors-primary-light);
+        letter-spacing: 0.08em;
+        user-select: none;
+    }
+
+    .section-title {
+        font-family: var(--font-mono-display);
+        font-size: var(--font-size-hero);
+        font-weight: var(--font-weight-black);
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        color: var(--colors-on-background);
+        line-height: 1.05;
+        overflow-wrap: break-word;
+        margin: 0;
+    }
+
+    .section-subtitle {
+        font-family: var(--font-mono-body);
+        font-size: var(--font-size-body-sm);
+        color: var(--colors-on-surface-muted);
+        line-height: 1.5;
+        margin: 0;
+    }
+</style>

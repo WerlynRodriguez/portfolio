@@ -1,0 +1,71 @@
+---
+import { type Locale, useTranslations } from "../../i18n/utils";
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang, "hero");
+---
+
+<section id="hero" class="hero-section" aria-labelledby="hero-heading">
+    <h1 id="hero-heading" class="billboard-title">
+        {t("title")}
+    </h1>
+
+    <p class="hero-mindset">{t("mindset")}</p>
+
+    <nav class="hero-actions" aria-label={t("actions.aria")}>
+        <ul>
+            <li>
+                <a class="btn-cad btn-secondary" href="#projects">
+                    {t("cta.projects")}
+                </a>
+            </li>
+            <li>
+                <a class="btn-cad" href="#contact">
+                    {t("cta.contact")}
+                </a>
+            </li>
+        </ul>
+    </nav>
+</section>
+
+<style>
+    .hero-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .hero-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 12px;
+    }
+
+    .status-indicator {
+        color: var(--colors-punctual);
+        margin-right: 6px;
+    }
+
+    .hero-mindset {
+        font-size: var(--font-size-body-md);
+        color: var(--colors-on-surface-muted);
+        max-width: 65ch;
+        line-height: 1.7;
+    }
+
+    .hero-actions ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+</style>

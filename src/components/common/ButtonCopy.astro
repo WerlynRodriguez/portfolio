@@ -1,0 +1,148 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    data: string;
+    text?: string;
+    prefixIcon?: string;
+    ariaLabel?: string;
+    id?: string;
+    class?: string;
+}
+
+const {
+    data,
+    text = data,
+    prefixIcon,
+    ariaLabel,
+    id,
+    class: className = "",
+} = Astro.props;
+---
+
+<button
+    type="button"
+    class={`btn-cad btn-copy-bar ${className}`.trim()}
+    id={id}
+    data-button-copy
+    data-value={data}
+    data-state="idle"
+    aria-label={ariaLabel}
+>
+    {prefixIcon ? (
+        <span class="icon-wrap prefix-action" aria-hidden="true">
+            <Icon name={prefixIcon} size={20} class="icon-prefix" />
+        </span>
+    ) : null}
+
+    <span class="copy-text-value">{text}</span>
+
+    <span class="icon-wrap postfix-action" aria-hidden="true">
+        <Icon name="squares" size={20} class="icon-state-idle" />
+        <Icon name="copy-check" size={20} class="icon-state-copied" />
+        <Icon name="copy-x" size={20} class="icon-state-error" />
+    </span>
+
+    <span class="sr-only" role="status" aria-live="polite"></span>
+</button>
+
+<script>
+    import "../../scripts/copyButton";
+</script>
+
+<style>
+    .btn-copy-bar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 18px;
+        background-color: var(--colors-surface-elevated);
+        border: 1px solid var(--colors-outline-subtle);
+        color: var(--colors-on-surface);
+        font-family: var(--font-mono-console);
+        font-size: var(--font-size-body-sm);
+        letter-spacing: 0.03em;
+        position: relative;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-copy-bar:hover {
+        background-color: var(--colors-surface);
+        /*outline: 2px dashed var(--colors-primary-light);
+        outline-offset: 2px;*/
+    }
+
+    .btn-copy-bar:focus-visible {
+        outline: 2px dashed var(--colors-primary-light);
+        outline-offset: 2px;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .copy-text-value {
+        flex: 1 1 auto;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .icon-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .postfix-action {
+        color: currentColor;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transform: none !important;
+        transition: none;
+    }
+
+    .btn-copy-bar:hover .postfix-action {
+        transform: none !important;
+    }
+
+    .icon-state-idle,
+    .icon-state-copied,
+    .icon-state-error {
+        display: inline-flex;
+    }
+
+    /* Idle state */
+    .icon-state-copied,
+    .icon-state-error {
+        display: none;
+    }
+
+    /* Copied state */
+    .btn-copy-bar[data-state="copied"] .icon-state-idle {
+        display: none;
+    }
+
+    .btn-copy-bar[data-state="copied"] .icon-state-copied {
+        display: inline-flex;
+    }
+
+    /* Error state */
+    .btn-copy-bar[data-state="error"] .icon-state-idle {
+        display: none;
+    }
+
+    .btn-copy-bar[data-state="error"] .icon-state-error {
+        display: inline-flex;
+    }
+</style>

@@ -1,0 +1,127 @@
+---
+import { getCollection } from "astro:content";
+import { type Locale, useTranslations } from "../../i18n/utils";
+import SectionHeader from "../common/SectionHeader.astro";
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang, "projects");
+const projectEntries = await getCollection("projects", ({ id }) =>
+    id.startsWith(`${lang}/`),
+);
+
+const surfaceVariants = [
+    "bento-surface-elevated",
+    "bento-surface-default",
+    "bento-surface-dim",
+];
+---
+
+<section
+    id="projects"
+    class="projects-section"
+    aria-labelledby="projects-heading"
+>
+    <SectionHeader
+        prefix="0x03"
+        title={t("heading")}
+        subtitle={t("subtitle")}
+        id="projects-heading"
+    />
+
+    <ul class="bento-grid">
+        {projectEntries.map((project, index) => {
+            const surfaceClass =
+                surfaceVariants[index % surfaceVariants.length];
+            return (
+                <li class="bento-item">
+                    <article class={`bento-card cad-frame ${surfaceClass}`}>
+                        <header class="bento-header">
+                            <span class="tag-cad">
+                                MOD_{String(index + 1).padStart(2, "0")}
+                            </span>
+                            <h3 class="bento-title">{project.data.title}</h3>
+                        </header>
+                        <p class="bento-desc">{project.data.description}</p>
+                        <nav class="bento-nav" aria-label={t("aria")}>
+                            <ul>
+                                {project.data.repoUrl && (
+                                    <li>
+                                        <a
+                                            class="btn-cad btn-secondary"
+                                            href={project.data.repoUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {t("sourceCode")}
+                                        </a>
+                                    </li>
+                                )}
+                                {project.data.demoUrl && (
+                                    <li>
+                                        <a
+                                            class="btn-cad"
+                                            href={project.data.demoUrl}
+                                        >
+                                            {t("liveDemo")}
+                                        </a>
+                                    </li>
+                                )}
+                            </ul>
+                        </nav>
+                    </article>
+                </li>
+            );
+        })}
+    </ul>
+</section>
+
+<style>
+    .projects-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .bento-item {
+        display: flex;
+    }
+
+    .bento-card {
+        width: 100%;
+        min-height: 220px;
+        gap: 20px;
+    }
+
+    .bento-header {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .bento-title {
+        font-size: var(--font-size-h3);
+        font-weight: var(--font-weight-semibold);
+        margin: 0;
+    }
+
+    .bento-desc {
+        color: var(--colors-on-surface-muted);
+        font-size: var(--font-size-body-sm);
+        line-height: 1.6;
+        flex-grow: 1;
+    }
+
+    .bento-nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+</style>

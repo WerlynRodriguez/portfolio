@@ -1,0 +1,75 @@
+:root {
+  /* Colors */
+  --colors-background: #050505;
+  --colors-on-background: #dddbcb;
+  --colors-surface: #141414;
+  --colors-surface-dim: #050505;
+  --colors-surface-elevated: #1f1f1f;
+  --colors-on-surface: #dddbcb;
+  --colors-on-surface-muted: #b8b5a2;
+  --colors-primary: #05668d;
+  --colors-on-primary: #ffffff;
+  --colors-primary-light: #3d9bc2;
+  --colors-on-primary-light: #050505;
+  --colors-secondary: #dddbcb;
+  --colors-on-secondary: #050505;
+  --colors-punctual: #f64740;
+  --colors-on-punctual: #050505;
+  --colors-punctual-dark: #c2302a;
+  --colors-on-punctual-dark: #ffffff;
+  --colors-outline: #dddbcb;
+  --colors-outline-subtle: #333333;
+  --colors-inverse-background: #dddbcb;
+  --colors-inverse-on-background: #050505;
+  --colors-inverse-surface: #ffffff;
+  --colors-inverse-on-surface: #050505;
+  --colors-inverse-outline: #050505;
+  --colors-inverse-outline-subtle: #c2bfad;
+
+  /* Background Grid Overlay */
+  --grid-dot-color: rgba(221, 219, 203, 0.08);
+  --grid-dot-size: 1px;
+  --grid-spacing: 48px;
+
+  /* Typography Scale */
+  --font-mono-display:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+  --font-mono-body:
+    "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+  --font-mono-console:
+    "Share Tech Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-black: 800;
+
+  --font-size-hero: clamp(2.25rem, 6vw, 4rem);
+  --font-size-h1: clamp(1.75rem, 4vw, 2.25rem);
+  --font-size-h2: clamp(1.35rem, 3vw, 1.75rem);
+  --font-size-h3: 1.375rem;
+  --font-size-h4: 1.125rem;
+  --font-size-body-md: 1rem;
+  --font-size-body-sm: 0.875rem;
+  --font-size-caption: 0.8125rem;
+  --font-size-console: 0.9375rem;
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --spacing-container-max: 1200px;
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 32px;
+  --spacing-margin-tablet: 24px;
+  --spacing-margin-mobile: 16px;
+
+  /* Elevation & Shadows */
+  --shadow-hard-base: 3px 3px 0px var(--colors-outline-subtle);
+  --shadow-hard-hover: 4px 4px 0px var(--colors-punctual);
+  --shadow-hard-primary: 4px 4px 0px var(--colors-primary);
+
+  /* Micro transitions */
+  --transition-micro: 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}

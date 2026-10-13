@@ -1,0 +1,323 @@
+@import "./tokens.css";
+
+/* Modern CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--colors-background);
+  color: var(--colors-on-background);
+  font-family: var(--font-mono-body);
+  font-size: var(--font-size-body-md);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  background-image: radial-gradient(
+    var(--grid-dot-color) var(--grid-dot-size),
+    transparent var(--grid-dot-size)
+  );
+  background-size: var(--grid-spacing) var(--grid-spacing);
+  background-repeat: repeat;
+}
+
+/* Page structural framework */
+.site-container {
+  max-width: var(--spacing-container-max);
+  margin-inline: auto;
+  padding-inline: var(--spacing-margin-desktop);
+}
+
+@media (max-width: 1023px) {
+  .site-container {
+    padding-inline: var(--spacing-margin-tablet);
+  }
+}
+
+@media (max-width: 639px) {
+  .site-container {
+    padding-inline: var(--spacing-margin-mobile);
+  }
+}
+
+main#main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding-block: 32px 64px;
+}
+
+/* Typography styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-mono-display);
+  color: var(--colors-on-background);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+.billboard-title {
+  font-family: var(--font-mono-display);
+  font-size: var(--font-size-hero);
+  font-weight: var(--font-weight-black);
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+}
+
+/* Section Header & Decorative Numbering */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px dotted var(--colors-outline-subtle);
+  padding-bottom: 12px;
+}
+
+.section-num {
+  font-family: var(--font-mono-console);
+  font-size: var(--font-size-h3);
+  color: var(--colors-on-surface-muted);
+  opacity: 0.55;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+.section-title {
+  font-family: var(--font-mono-display);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* CAD Frame with Corner Crosshairs (Background-Image Linear Gradient Technique) */
+.cad-frame {
+  --border-color: var(--colors-outline-subtle);
+  --crosshair-color: var(--colors-primary);
+  --crosshair-len: 10px;
+  --crosshair-thick: 2px;
+  position: relative;
+  border: 1px solid var(--border-color);
+  background-color: var(--colors-surface);
+  background-image:
+    /* Top-left corner crosshair */
+    linear-gradient(
+      to right,
+      var(--crosshair-color) var(--crosshair-len),
+      transparent 0
+    ),
+    linear-gradient(
+      to bottom,
+      var(--crosshair-color) var(--crosshair-len),
+      transparent 0
+    ),
+    /* Top-right corner crosshair */
+    linear-gradient(
+      to left,
+      var(--crosshair-color) var(--crosshair-len),
+      transparent 0
+    ),
+    linear-gradient(
+      to bottom,
+      var(--crosshair-color) var(--crosshair-len),
+      transparent 0
+    ),
+    /* Bottom-left corner crosshair */
+    linear-gradient(
+      to right,
+      var(--crosshair-color) var(--crosshair-len),
+      transparent 0
+    ),
+    linear-gradient(
+      to top,
+      var(--crosshair-color) var(--crosshair-len),
+      transparent 0
+    ),
+    /* Bottom-right corner crosshair */
+    linear-gradient(
+      to left,
+      var(--crosshair-color) var(--crosshair-len),
+      transparent 0
+    ),
+    linear-gradient(
+      to top,
+      var(--crosshair-color) var(--crosshair-len),
+      transparent 0
+    );
+  background-position:
+    top left,
+    top left,
+    top right,
+    top right,
+    bottom left,
+    bottom left,
+    bottom right,
+    bottom right;
+  background-size:
+    var(--crosshair-len) var(--crosshair-thick),
+    var(--crosshair-thick) var(--crosshair-len),
+    var(--crosshair-len) var(--crosshair-thick),
+    var(--crosshair-thick) var(--crosshair-len),
+    var(--crosshair-len) var(--crosshair-thick),
+    var(--crosshair-thick) var(--crosshair-len),
+    var(--crosshair-len) var(--crosshair-thick),
+    var(--crosshair-thick) var(--crosshair-len);
+  background-repeat: no-repeat;
+}
+
+/* Micro-Interaction Components */
+.btn-cad {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  min-height: 44px;
+  font-family: var(--font-mono-body);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  border: 1px solid var(--colors-primary);
+  background-color: var(--colors-primary);
+  color: var(--colors-on-primary);
+  cursor: pointer;
+  outline-offset: 6px;
+  transition:
+    background-color var(--transition-micro),
+    outline var(--transition-micro),
+    outline-offset var(--transition-micro);
+}
+
+.btn-cad:hover {
+  background-color: var(--colors-surface-elevated);
+  outline: 2px dashed var(--colors-primary);
+  outline-offset: 2px;
+}
+
+.btn-cad.btn-secondary {
+  background-color: var(--colors-surface);
+  color: var(--colors-on-surface);
+  border-color: var(--colors-outline-subtle);
+}
+
+.btn-cad.btn-secondary:hover {
+  background-color: var(--colors-surface-elevated);
+  outline: 2px dashed var(--colors-punctual);
+}
+
+.tag-cad {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-family: var(--font-mono-console);
+  font-size: var(--font-size-caption);
+  background-color: var(--colors-surface-elevated);
+  color: var(--colors-on-surface-muted);
+  border: 1px solid var(--colors-outline-subtle);
+  outline-offset: 6px;
+  transition:
+    transform var(--transition-micro),
+    outline var(--transition-micro),
+    outline-offset var(--transition-micro),
+    color var(--transition-micro);
+}
+
+.tag-cad:hover {
+  outline: 2px dashed var(--colors-punctual);
+  outline-offset: 2px;
+  color: var(--colors-on-surface);
+}
+
+/* Bento Grid System */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .bento-grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .bento-grid > *:nth-child(1) {
+    grid-column: span 12;
+  }
+  .bento-grid > *:nth-child(2) {
+    grid-column: span 7;
+  }
+  .bento-grid > *:nth-child(3) {
+    grid-column: span 5;
+  }
+  .bento-grid > *:nth-child(n + 4) {
+    grid-column: span 6;
+  }
+}
+
+.bento-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--colors-outline-subtle);
+}
+
+.bento-surface-default {
+  background-color: var(--colors-surface);
+}
+
+.bento-surface-elevated {
+  background-color: var(--colors-surface-elevated);
+}
+
+.bento-surface-dim {
+  background-color: var(--colors-surface-dim);
+}
+
+.separator-dashed {
+  border-bottom: 2px dashed var(--colors-outline-subtle);
+}
+
+.separator {
+  border-bottom: 2px groove var(--colors-outline-subtle);
+}
+
+/* Focus indicator compliant with WCAG 2.2 AA */
+:focus-visible {
+  outline: 2px solid var(--colors-punctual);
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    transform: none;
+  }
+}

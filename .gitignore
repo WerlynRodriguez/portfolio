@@ -3,9 +3,14 @@ dist/
 # generated types
 .astro/
 
+# test outputs
+playwright-report/
+test-results/
+
 # AI
 .agents/
 AGENTS.md
+DESIGN.md
 specs/
 .tgrep/
 
@@ -28,5 +33,6 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-# jetbrains setting folder
+# editor setting folders
 .idea/
+.obsidian/
