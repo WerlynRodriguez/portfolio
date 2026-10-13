@@ -1,8 +1,8 @@
 ---
-import { academicItems as enAcademics } from '../../content/data/en';
-import { academicItems as esAcademics } from '../../content/data/es';
-import { type Locale, useTranslations } from '../../i18n/utils';
-import SectionHeader from '../common/SectionHeader.astro';
+import SectionHeader from '@components/common/SectionHeader.astro';
+import { academicItems as enAcademics } from '@content/data/en';
+import { academicItems as esAcademics } from '@content/data/es';
+import { type Locale, useTranslations } from '@i18n/utils';
 
 interface Props {
   lang: Locale;

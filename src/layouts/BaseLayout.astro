@@ -1,8 +1,8 @@
 ---
-import Footer from '../components/common/Footer.astro';
-import Header from '../components/common/Header.astro';
-import { type Locale, resolveLocale, useTranslations } from '../i18n/utils';
-import '../styles/global.css';
+import Footer from '@components/common/Footer.astro';
+import Header from '@components/common/Header.astro';
+import { type Locale, resolveLocale, useTranslations } from '@i18n/utils';
+import '@styles/global.css';
 
 interface Props {
   title?: string;
@@ -33,6 +33,39 @@ const skipLabel = t('skip.link');
         />
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="color-scheme" content="light dark" />
+        <script is:inline>
+            (function () {
+                try {
+                    var t = localStorage.getItem("theme");
+                    var cs =
+                        t === "dark"
+                            ? "dark"
+                            : t === "light" || t === "eclipse"
+                              ? "light"
+                              : "light dark";
+                    var meta = document.querySelector(
+                        'meta[name="color-scheme"]',
+                    );
+                    if (meta) meta.content = cs;
+                    if (t === "eclipse") {
+                        document.documentElement.setAttribute(
+                            "data-theme",
+                            "eclipse",
+                        );
+                    } else {
+                        document.documentElement.removeAttribute("data-theme");
+                    }
+                    if (t) {
+                        document.documentElement.setAttribute(
+                            "data-active-theme",
+                            t,
+                        );
+                    }
+                } catch (_) {}
+                document.documentElement.classList.add("js");
+            })();
+        </script>
     </head>
     <body>
         <Header lang={lang} />

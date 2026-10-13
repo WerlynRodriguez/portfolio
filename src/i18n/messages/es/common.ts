@@ -19,6 +19,6 @@ export default {
   'footer.copyEmail': 'Copiar correo electrónico',
   'footer.socialNav': 'Enlaces sociales',
   'footer.aiAttribution': 'Diseñado con IA (Inteligencia Artesanal)',
-  'footer.toTop': 'Volver arriba',
+  'footer.toTop': 'Inicio',
   'footer.backToTopAria': 'Volver al inicio de la página',
 } as const;

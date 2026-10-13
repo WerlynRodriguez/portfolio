@@ -1,0 +1,262 @@
+---
+import { type Locale, useTranslations } from "@i18n/utils";
+import { Icon } from "astro-icon/components";
+import { THEMES } from "@/lib/theme";
+
+interface Props {
+    lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang, "theme");
+
+const themeIcons = {
+    system: "device-desktop",
+    light: "sun",
+    dark: "moon",
+    eclipse: "eclipse",
+} as const;
+---
+
+<div class="theme-switcher-container" data-theme-switcher-wrap>
+    <button
+        type="button"
+        class="btn-cad theme-toggle-btn"
+        id="theme-trigger-btn"
+        popovertarget="theme-menu"
+        aria-haspopup="menu"
+        aria-label={t("trigger.aria")}
+        data-theme-trigger
+    >
+        <span class="icon-wrap" aria-hidden="true">
+            <Icon
+                name="device-desktop"
+                size={18}
+                class="icon-theme icon-system"
+            />
+            <Icon name="sun" size={18} class="icon-theme icon-light" />
+            <Icon name="moon" size={18} class="icon-theme icon-dark" />
+            <Icon name="eclipse" size={18} class="icon-theme icon-eclipse" />
+        </span>
+    </button>
+
+    <div
+        id="theme-menu"
+        popover="auto"
+        role="menu"
+        class="theme-menu-popover cad-frame"
+        aria-label={t("menu.aria")}
+        data-theme-switcher
+    >
+        <div class="theme-menu-list">
+            {THEMES.map((theme) => (
+                <button
+                    type="button"
+                    role="menuitemradio"
+                    class="theme-option-btn"
+                    data-theme-option={theme}
+                    aria-checked={theme === "system" ? "true" : "false"}
+                >
+                    <span class="option-icon" aria-hidden="true">
+                        <Icon name={themeIcons[theme]} size={16} />
+                    </span>
+                    <span class="option-label">{t(`option.${theme}`)}</span>
+                    {theme === "system" && (
+                        <span class="system-hint" aria-hidden="true">
+                            <span class="hint-dark">· {t("hint.dark")}</span>
+                            <span class="hint-light">· {t("hint.light")}</span>
+                        </span>
+                    )}
+                </button>
+            ))}
+        </div>
+    </div>
+</div>
+
+<script>
+    import "@scripts/themeSwitcher";
+</script>
+
+<style>
+    .theme-switcher-container {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .theme-toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 10px;
+        min-width: 38px;
+        min-height: 38px;
+        background-color: var(--colors-surface-elevated);
+        border: 1px solid var(--colors-outline-subtle);
+        color: var(--colors-on-surface);
+        cursor: pointer;
+        anchor-name: --theme-trigger-btn;
+        outline-offset: 6px;
+        transition:
+            background-color var(--transition-micro),
+            border-color var(--transition-micro),
+            color var(--transition-micro),
+            outline var(--transition-micro),
+            outline-offset var(--transition-micro);
+    }
+
+    .theme-toggle-btn:hover {
+        background-color: var(--colors-surface);
+        border-color: var(--colors-outline);
+        color: var(--colors-on-surface);
+        outline: 2px dashed var(--colors-punctual);
+        outline-offset: 2px;
+    }
+
+    .theme-toggle-btn:focus-visible {
+        outline: 2px solid var(--colors-punctual);
+        outline-offset: 2px;
+    }
+
+    .icon-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: inherit;
+    }
+
+    .icon-theme {
+        display: none;
+        color: inherit;
+    }
+
+    /* Dynamically toggle active icon based on root state */
+    :global(:root:not([data-active-theme])) .icon-system,
+    :global(:root[data-active-theme="system"]) .icon-system {
+        display: inline-flex;
+    }
+
+    :global(:root[data-active-theme="light"]) .icon-light {
+        display: inline-flex;
+    }
+
+    :global(:root[data-active-theme="dark"]) .icon-dark {
+        display: inline-flex;
+    }
+
+    :global(:root[data-active-theme="eclipse"]) .icon-eclipse {
+        display: inline-flex;
+    }
+
+    /* Popover styles */
+    .theme-menu-popover {
+        margin: 0;
+        padding: 6px;
+        background-color: var(--colors-surface-elevated);
+        border: 1px solid var(--colors-outline-subtle);
+        color: var(--colors-on-surface);
+        box-shadow: var(--shadow-hard-base);
+        font-family: var(--font-mono-console);
+        font-size: var(--font-size-body-sm);
+        inset: auto;
+        top: anchor(bottom);
+        right: anchor(right);
+        position-anchor: --theme-trigger-btn;
+        z-index: 100;
+    }
+
+    @supports not (top: anchor(bottom)) {
+        .theme-menu-popover {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 6px;
+        }
+    }
+
+    .theme-menu-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 140px;
+    }
+
+    .theme-option-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--colors-on-surface-muted);
+        font-family: inherit;
+        font-size: var(--font-size-body-sm);
+        text-align: left;
+        cursor: pointer;
+        width: 100%;
+        white-space: nowrap;
+        transition:
+            background-color var(--transition-micro),
+            color var(--transition-micro);
+    }
+
+    .theme-option-btn:hover {
+        background-color: var(--colors-surface);
+        color: var(--colors-on-surface);
+    }
+
+    .theme-option-btn:focus-visible {
+        outline: 2px dashed var(--colors-primary-light);
+        outline-offset: -2px;
+        color: var(--colors-on-surface);
+    }
+
+    .theme-option-btn[aria-checked="true"],
+    .theme-option-btn.is-active {
+        color: var(--colors-primary-light);
+        font-weight: var(--font-weight-semibold);
+        border-color: var(--colors-outline-subtle);
+        background-color: var(--colors-surface);
+    }
+
+    .option-icon {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    .option-label {
+        flex: 1 1 auto;
+    }
+
+    .system-hint {
+        font-size: var(--font-size-caption);
+        opacity: 0.7;
+        flex-shrink: 0;
+    }
+
+    .hint-dark {
+        display: none;
+    }
+
+    .hint-light {
+        display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .hint-dark {
+            display: inline;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        .hint-light {
+            display: inline;
+        }
+    }
+
+    /* Zero-JS graceful degradation: hide switcher if JS is not enabled */
+    :global(html:not(.js)) .theme-toggle-btn {
+        display: none;
+    }
+</style>

@@ -1,13 +1,13 @@
 ---
-import { type Locale, useTranslations } from "../../i18n/utils";
-import SectionHeader from "../common/SectionHeader.astro";
+import SectionHeader from '@components/common/SectionHeader.astro';
+import { type Locale, useTranslations } from '@i18n/utils';
 
 interface Props {
-    lang: Locale;
+  lang: Locale;
 }
 
 const { lang } = Astro.props;
-const t = useTranslations(lang, "overview");
+const t = useTranslations(lang, 'overview');
 ---
 
 <section

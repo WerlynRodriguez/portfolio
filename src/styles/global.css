@@ -11,7 +11,19 @@
 
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body,
+  .site-header,
+  .site-footer,
+  .cad-frame,
+  .btn-cad {
+    transition:
+      background-color var(--transition-micro),
+      color var(--transition-micro),
+      border-color var(--transition-micro);
+  }
 }
 
 body {
@@ -198,27 +210,34 @@ h6 {
   background-color: var(--colors-primary);
   color: var(--colors-on-primary);
   cursor: pointer;
+  /*outline: 2px dashed transparent;*/
   outline-offset: 6px;
   transition:
     background-color var(--transition-micro),
-    outline var(--transition-micro),
-    outline-offset var(--transition-micro);
+    border-color var(--transition-micro),
+    color var(--transition-micro),
+    outline-offset var(--transition-micro),
+    outline var(--transition-micro);
 }
 
 .btn-cad:hover {
-  background-color: var(--colors-surface-elevated);
-  outline: 2px dashed var(--colors-primary);
+  background-color: var(--colors-primary-light);
+  color: var(--colors-on-primary-light);
+  border-color: var(--colors-primary-light);
+  outline: 2px dashed var(--colors-punctual);
   outline-offset: 2px;
 }
 
 .btn-cad.btn-secondary {
-  background-color: var(--colors-surface);
+  background-color: var(--colors-surface-dim);
   color: var(--colors-on-surface);
   border-color: var(--colors-outline-subtle);
 }
 
 .btn-cad.btn-secondary:hover {
   background-color: var(--colors-surface-elevated);
+  color: var(--colors-on-surface);
+  border-color: var(--colors-outline);
   outline: 2px dashed var(--colors-punctual);
 }
 

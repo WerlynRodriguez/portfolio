@@ -3,20 +3,18 @@ import type {
   ContactData,
   RoleItem,
   SkillsData,
-} from '../../types/data';
+} from '@/types/data';
 
 export const experienceRoles: RoleItem[] = [
   {
     title: 'Most recent Job',
     period: { start: '2024' },
-    description:
-      'Desc here',
+    description: 'Desc here',
   },
   {
     title: 'Most relevant Job',
     period: { start: '2022', end: '2024' },
-    description:
-      'Desc here',
+    description: 'Desc here',
   },
 ];
 

@@ -1,7 +1,6 @@
 export default {
   title: 'Werlyn',
-  mindset:
-    'Mindset here.',
+  mindset: 'Mindset here.',
   'actions.aria': 'Acciones rápidas',
   'cta.projects': 'Ver Proyectos',
   'cta.contact': 'Contactar',

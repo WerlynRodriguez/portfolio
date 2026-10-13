@@ -1,33 +1,46 @@
 :root {
-  /* Colors */
-  --colors-background: #050505;
-  --colors-on-background: #dddbcb;
-  --colors-surface: #141414;
-  --colors-surface-dim: #050505;
-  --colors-surface-elevated: #1f1f1f;
-  --colors-on-surface: #dddbcb;
-  --colors-on-surface-muted: #b8b5a2;
-  --colors-primary: #05668d;
+  /* Dynamic color-scheme mapping (Base: light dark) */
+  color-scheme: light dark;
+
+  &:has(> head > meta[name="color-scheme"][content="dark"]) {
+    color-scheme: dark;
+  }
+  &:has(> head > meta[name="color-scheme"][content="light"]) {
+    color-scheme: light;
+  }
+
+  /* Colors (light-dark(light, dark)) */
+  --colors-background: light-dark(#fbfbfa, #050505);
+  --colors-on-background: light-dark(#111215, #dddbcb);
+  --colors-surface: light-dark(#ffffff, #141414);
+  --colors-surface-dim: light-dark(#f1f0ea, #050505);
+  --colors-surface-elevated: light-dark(#ffffff, #1f1f1f);
+  --colors-on-surface: light-dark(#111215, #dddbcb);
+  --colors-on-surface-muted: light-dark(#525149, #b8b5a2);
+  --colors-primary: light-dark(#03638c, #05668d);
   --colors-on-primary: #ffffff;
-  --colors-primary-light: #3d9bc2;
-  --colors-on-primary-light: #050505;
-  --colors-secondary: #dddbcb;
-  --colors-on-secondary: #050505;
-  --colors-punctual: #f64740;
-  --colors-on-punctual: #050505;
-  --colors-punctual-dark: #c2302a;
+  --colors-primary-light: light-dark(#024a68, #3d9bc2);
+  --colors-on-primary-light: light-dark(#ffffff, #050505);
+  --colors-secondary: light-dark(#2e2d27, #dddbcb);
+  --colors-on-secondary: light-dark(#fbfbfa, #050505);
+  --colors-punctual: light-dark(#c72c2c, #f64740);
+  --colors-on-punctual: light-dark(#ffffff, #050505);
+  --colors-punctual-dark: light-dark(#991f1a, #c2302a);
   --colors-on-punctual-dark: #ffffff;
-  --colors-outline: #dddbcb;
-  --colors-outline-subtle: #333333;
-  --colors-inverse-background: #dddbcb;
-  --colors-inverse-on-background: #050505;
-  --colors-inverse-surface: #ffffff;
-  --colors-inverse-on-surface: #050505;
-  --colors-inverse-outline: #050505;
-  --colors-inverse-outline-subtle: #c2bfad;
+  --colors-outline: light-dark(#111215, #dddbcb);
+  --colors-outline-subtle: light-dark(#d6d4c8, #333333);
+  --colors-inverse-background: light-dark(#050505, #fbfbfa);
+  --colors-inverse-on-background: light-dark(#dddbcb, #111215);
+  --colors-inverse-surface: light-dark(#141414, #ffffff);
+  --colors-inverse-on-surface: light-dark(#dddbcb, #111215);
+  --colors-inverse-outline: light-dark(#dddbcb, #111215);
+  --colors-inverse-outline-subtle: light-dark(#333333, #d6d4c8);
 
   /* Background Grid Overlay */
-  --grid-dot-color: rgba(221, 219, 203, 0.08);
+  --grid-dot-color: light-dark(
+    rgba(17, 18, 21, 0.07),
+    rgba(221, 219, 203, 0.08)
+  );
   --grid-dot-size: 1px;
   --grid-spacing: 48px;
 
@@ -72,4 +85,84 @@
 
   /* Micro transitions */
   --transition-micro: 120ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Browser UI */
+  accent-color: var(--colors-primary);
+  scrollbar-color: var(--colors-outline-subtle) var(--colors-surface);
+}
+
+/* Fallback for legacy browsers without light-dark() support */
+@supports not (color: light-dark(#000, #fff)) {
+  :root {
+    --colors-background: #fbfbfa;
+    --colors-on-background: #111215;
+    --colors-surface: #ffffff;
+    --colors-surface-dim: #f1f0ea;
+    --colors-surface-elevated: #ffffff;
+    --colors-on-surface: #111215;
+    --colors-on-surface-muted: #525149;
+    --colors-primary: #03638c;
+    --colors-primary-light: #024a68;
+    --colors-on-primary-light: #ffffff;
+    --colors-secondary: #2e2d27;
+    --colors-on-secondary: #fbfbfa;
+    --colors-punctual: #c72c2c;
+    --colors-on-punctual: #ffffff;
+    --colors-punctual-dark: #991f1a;
+    --colors-outline: #111215;
+    --colors-outline-subtle: #d6d4c8;
+    --grid-dot-color: rgba(17, 18, 21, 0.07);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not(:has(> head > meta[name="color-scheme"][content="light"])) {
+      --colors-background: #050505;
+      --colors-on-background: #dddbcb;
+      --colors-surface: #141414;
+      --colors-surface-dim: #050505;
+      --colors-surface-elevated: #1f1f1f;
+      --colors-on-surface: #dddbcb;
+      --colors-on-surface-muted: #b8b5a2;
+      --colors-primary: #05668d;
+      --colors-primary-light: #3d9bc2;
+      --colors-on-primary-light: #050505;
+      --colors-secondary: #dddbcb;
+      --colors-on-secondary: #050505;
+      --colors-punctual: #f64740;
+      --colors-on-punctual: #050505;
+      --colors-punctual-dark: #c2302a;
+      --colors-outline: #dddbcb;
+      --colors-outline-subtle: #333333;
+      --grid-dot-color: rgba(221, 219, 203, 0.08);
+    }
+  }
+
+  :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+    --colors-background: #050505;
+    --colors-on-background: #dddbcb;
+    --colors-surface: #141414;
+    --colors-surface-dim: #050505;
+    --colors-surface-elevated: #1f1f1f;
+    --colors-on-surface: #dddbcb;
+    --colors-on-surface-muted: #b8b5a2;
+    --colors-primary: #05668d;
+    --colors-primary-light: #3d9bc2;
+    --colors-on-primary-light: #050505;
+    --colors-secondary: #dddbcb;
+    --colors-on-secondary: #050505;
+    --colors-punctual: #f64740;
+    --colors-on-punctual: #050505;
+    --colors-punctual-dark: #c2302a;
+    --colors-outline: #dddbcb;
+    --colors-outline-subtle: #333333;
+    --grid-dot-color: rgba(221, 219, 203, 0.08);
+  }
+}
+
+/* Eclipse theme: Hybrid layout where containers render dark inside a light page */
+:root[data-theme="eclipse"]
+:is(.site-header, .site-footer, .cad-frame, .hero-section, .hero-console) {
+  color-scheme: dark;
+  background-color: var(--colors-surface);
+  color: var(--colors-on-surface);
 }

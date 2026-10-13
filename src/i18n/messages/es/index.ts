@@ -6,6 +6,7 @@ import hero from './hero';
 import overview from './overview';
 import projects from './projects';
 import skills from './skills';
+import theme from './theme';
 
 export default {
   common,
@@ -16,4 +17,5 @@ export default {
   skills,
   academics,
   contact,
+  theme,
 } as const;

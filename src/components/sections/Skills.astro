@@ -1,8 +1,8 @@
 ---
-import { skillsData as enSkills } from '../../content/data/en';
-import { skillsData as esSkills } from '../../content/data/es';
-import { type Locale, useTranslations } from '../../i18n/utils';
-import SectionHeader from '../common/SectionHeader.astro';
+import SectionHeader from '@components/common/SectionHeader.astro';
+import { skillsData as enSkills } from '@content/data/en';
+import { skillsData as esSkills } from '@content/data/es';
+import { type Locale, useTranslations } from '@i18n/utils';
 
 interface Props {
   lang: Locale;
@@ -14,66 +14,82 @@ const skills = lang === 'es' ? esSkills : enSkills;
 ---
 
 <section id="skills" class="skills-section" aria-labelledby="skills-heading">
-  <SectionHeader
-    prefix="0x04"
-    title={t('heading')}
-    subtitle={t('subtitle')}
-    id="skills-heading"
-  />
-  <div class="skills-diagram">
-    <section class="skills-column cad-frame" aria-labelledby="skills-frontend-heading">
-      <h3 id="skills-frontend-heading" class="skills-category-title">{t('frontendHeading')}</h3>
-      <ul class="skills-list">
-        {skills.frontendSkills.map((skill) => (
-          <li><span class="tag-cad">{skill}</span></li>
-        ))}
-      </ul>
-    </section>
-    <section class="skills-column cad-frame bento-surface-elevated" aria-labelledby="skills-backend-heading">
-      <h3 id="skills-backend-heading" class="skills-category-title">{t('backendHeading')}</h3>
-      <ul class="skills-list">
-        {skills.backendSkills.map((skill) => (
-          <li><span class="tag-cad">{skill}</span></li>
-        ))}
-      </ul>
-    </section>
-  </div>
+    <SectionHeader
+        prefix="0x04"
+        title={t("heading")}
+        subtitle={t("subtitle")}
+        id="skills-heading"
+    />
+    <div class="skills-diagram">
+        <section
+            class="skills-column cad-frame"
+            aria-labelledby="skills-frontend-heading"
+        >
+            <h3
+                id="skills-frontend-heading"
+                class="skills-category-title separator"
+            >
+                {t("frontendHeading")}
+            </h3>
+            <ul class="skills-list">
+                {skills.frontendSkills.map((skill) => (
+                    <li>
+                        <span class="tag-cad">{skill}</span>
+                    </li>
+                ))}
+            </ul>
+        </section>
+        <section
+            class="skills-column cad-frame bento-surface-elevated"
+            aria-labelledby="skills-backend-heading"
+        >
+            <h3 id="skills-backend-heading" class="skills-category-title">
+                {t("backendHeading")}
+            </h3>
+            <ul class="skills-list">
+                {skills.backendSkills.map((skill) => (
+                    <li>
+                        <span class="tag-cad">{skill}</span>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    </div>
 </section>
 
 <style>
-  .skills-section {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  .skills-diagram {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  @media (min-width: 768px) {
-    .skills-diagram {
-      grid-template-columns: repeat(2, 1fr);
+    .skills-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
-  }
-  .skills-column {
-    padding: clamp(20px, 3vw, 28px);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .skills-category-title {
-    font-size: var(--font-size-h3);
-    border-bottom: 1px dotted var(--colors-outline-subtle);
-    padding-bottom: 8px;
-    margin: 0;
-  }
-  .skills-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+    .skills-diagram {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    @media (min-width: 768px) {
+        .skills-diagram {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    .skills-column {
+        padding: clamp(20px, 3vw, 28px);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .skills-category-title {
+        font-size: var(--font-size-h3);
+        padding-bottom: 8px;
+        margin: 0;
+    }
+    .skills-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 </style>

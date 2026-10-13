@@ -1,5 +1,5 @@
 export default {
   heading: 'Resumen',
   subtitle: 'Hola, Mundo',
-  content: 'content'
+  content: 'content',
 } as const;

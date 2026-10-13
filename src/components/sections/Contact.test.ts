@@ -1,7 +1,7 @@
+import { contactData as enContact } from '@content/data/en';
+import { contactData as esContact } from '@content/data/es';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, it } from 'vitest';
-import { contactData as enContact } from '../../content/data/en';
-import { contactData as esContact } from '../../content/data/es';
 import Contact from './Contact.astro';
 
 describe('Contact section component', () => {

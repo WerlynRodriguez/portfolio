@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { type Locale, useTranslations } from '../../i18n/utils';
+import ThemeSwitcher from '@components/common/ThemeSwitcher.astro';
+import { type Locale, useTranslations } from '@i18n/utils';
 
 interface Props {
   lang: Locale;
@@ -29,30 +30,33 @@ const navItems = [
             ))}
         </ul>
     </nav>
-    <nav class="lang-nav" aria-label={t("nav.langAria")}>
-        <ul>
-            <li>
-                <a
-                    href={getRelativeLocaleUrl("en", "")}
-                    aria-current={lang === "en" ? "page" : undefined}
-                    hreflang="en"
-                    class:list={["lang-link", { active: lang === "en" }]}
-                >
-                    {t("lang.en")}
-                </a>
-            </li>
-            <li>
-                <a
-                    href={getRelativeLocaleUrl("es", "")}
-                    aria-current={lang === "es" ? "page" : undefined}
-                    hreflang="es"
-                    class:list={["lang-link", { active: lang === "es" }]}
-                >
-                    {t("lang.es")}
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <div class="header-actions">
+        <ThemeSwitcher lang={lang} />
+        <nav class="lang-nav" aria-label={t("nav.langAria")}>
+            <ul>
+                <li>
+                    <a
+                        href={getRelativeLocaleUrl("en", "")}
+                        aria-current={lang === "en" ? "page" : undefined}
+                        hreflang="en"
+                        class:list={["lang-link", { active: lang === "en" }]}
+                    >
+                        {t("lang.en")}
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href={getRelativeLocaleUrl("es", "")}
+                        aria-current={lang === "es" ? "page" : undefined}
+                        hreflang="es"
+                        class:list={["lang-link", { active: lang === "es" }]}
+                    >
+                        {t("lang.es")}
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
 <style>
@@ -65,6 +69,11 @@ const navItems = [
         padding-block: 20px;
         font-family: var(--font-mono-console);
         font-size: var(--font-size-body-sm);
+    }
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
     }
     .main-nav ul,
     .lang-nav ul {

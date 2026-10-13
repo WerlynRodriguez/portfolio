@@ -34,22 +34,20 @@ describe('i18n utils', () => {
     it('retrieves common namespace translations by default', () => {
       const tEn = useTranslations('en');
       expect(tEn('nav.overview')).toBe('Overview');
-      expect(tEn('meta.title')).toBe('Werlyn | Software Engineer Portfolio');
+      expect(tEn('meta.title')).toBe('Werlyn - Software Developer');
 
       const tEs = useTranslations('es');
       expect(tEs('nav.overview')).toBe('Resumen');
-      expect(tEs('meta.title')).toBe(
-        'Werlyn | Portafolio de Ingeniería de Software',
-      );
+      expect(tEs('meta.title')).toBe('Werlyn - Desarrollador de Software');
     });
 
     it('retrieves scoped translations for a specific namespace', () => {
       const tHeroEn = useTranslations('en', 'hero');
-      expect(tHeroEn('title')).toBe('Werlyn — Software Engineer');
+      expect(tHeroEn('title')).toBe('Werlyn');
       expect(tHeroEn('cta.projects')).toBe('View Projects');
 
       const tHeroEs = useTranslations('es', 'hero');
-      expect(tHeroEs('title')).toBe('Werlyn — Ingeniero de Software');
+      expect(tHeroEs('title')).toBe('Werlyn');
       expect(tHeroEs('cta.projects')).toBe('Ver Proyectos');
     });
 

@@ -1,22 +1,22 @@
 ---
-import { getCollection } from "astro:content";
-import { type Locale, useTranslations } from "../../i18n/utils";
-import SectionHeader from "../common/SectionHeader.astro";
+import { getCollection } from 'astro:content';
+import SectionHeader from '@components/common/SectionHeader.astro';
+import { type Locale, useTranslations } from '@i18n/utils';
 
 interface Props {
-    lang: Locale;
+  lang: Locale;
 }
 
 const { lang } = Astro.props;
-const t = useTranslations(lang, "projects");
-const projectEntries = await getCollection("projects", ({ id }) =>
-    id.startsWith(`${lang}/`),
+const t = useTranslations(lang, 'projects');
+const projectEntries = await getCollection('projects', ({ id }) =>
+  id.startsWith(`${lang}/`),
 );
 
 const surfaceVariants = [
-    "bento-surface-elevated",
-    "bento-surface-default",
-    "bento-surface-dim",
+  'bento-surface-elevated',
+  'bento-surface-default',
+  'bento-surface-dim',
 ];
 ---
 

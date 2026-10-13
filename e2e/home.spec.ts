@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
+import { contactData as enContact } from '@content/data/en';
+import { contactData as esContact } from '@content/data/es';
 import { expect, test } from '@playwright/test';
-import { contactData as enContact } from '../src/content/data/en';
-import { contactData as esContact } from '../src/content/data/es';
 
 const requiredSections = [
   'hero',
@@ -119,14 +119,14 @@ test.describe('Home Page (English)', () => {
     await expect(footer).toBeVisible();
 
     const copyright = footer.locator('.footer-copyright');
-    await expect(copyright).toContainText('Werlyn. All rights reserved.');
+    await expect(copyright).toContainText('Werlyn.');
     await expect(copyright.locator('time')).toHaveText(
       String(new Date().getFullYear()),
     );
 
     const attribution = footer.locator('.footer-attribution');
     await expect(attribution).toHaveText(
-      'Designed by me with AI (Artesanal Inteligence)',
+      'Designed with AI (Artesanal Inteligence)',
     );
 
     const toTopBtn = footer.locator('a.btn-to-top');
@@ -217,16 +217,14 @@ test.describe('Home Page (Spanish)', () => {
     await expect(footer).toBeVisible();
 
     const copyright = footer.locator('.footer-copyright');
-    await expect(copyright).toContainText(
-      'Werlyn. Todos los derechos reservados.',
-    );
+    await expect(copyright).toContainText('Werlyn.');
     await expect(copyright.locator('time')).toHaveText(
       String(new Date().getFullYear()),
     );
 
     const attribution = footer.locator('.footer-attribution');
     await expect(attribution).toHaveText(
-      'Diseñado por mí con IA (Inteligencia Artesanal)',
+      'Diseñado con IA (Inteligencia Artesanal)',
     );
 
     const toTopBtn = footer.locator('a.btn-to-top');

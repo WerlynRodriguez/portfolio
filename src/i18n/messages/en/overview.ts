@@ -1,5 +1,5 @@
 export default {
   heading: 'Overview',
   subtitle: 'Hello, World',
-  content: 'content'
+  content: 'content',
 } as const;

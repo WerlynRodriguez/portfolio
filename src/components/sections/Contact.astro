@@ -1,10 +1,10 @@
 ---
+import ButtonCopy from '@components/common/ButtonCopy.astro';
+import SectionHeader from '@components/common/SectionHeader.astro';
+import { contactData as enContact } from '@content/data/en';
+import { contactData as esContact } from '@content/data/es';
+import { type Locale, useTranslations } from '@i18n/utils';
 import { Icon } from 'astro-icon/components';
-import { contactData as enContact } from '../../content/data/en';
-import { contactData as esContact } from '../../content/data/es';
-import { type Locale, useTranslations } from '../../i18n/utils';
-import ButtonCopy from '../common/ButtonCopy.astro';
-import SectionHeader from '../common/SectionHeader.astro';
 
 interface Props {
   lang: Locale;
