@@ -7,47 +7,75 @@ import {
   toDataTheme,
 } from '@/lib/theme';
 
+const COLOR_SCHEME_META = 'meta[name="color-scheme"]';
+const THEME_OPTION = '[data-theme-option]';
+const THEME_TRIGGER = '[data-theme-trigger]';
+const THEME_MENU = '[role="menu"]';
+const POPOVER = '[popover]';
+const ACTIVE_CLASS = 'is-active';
+const ARIA_CHECKED = 'aria-checked';
+const DATA_THEME = 'data-theme';
+const DATA_ACTIVE_THEME = 'data-active-theme';
+
+/** Cache the meta element per document to avoid querySelector on every apply. */
+const metaCache = new WeakMap<Document, HTMLMetaElement>();
+
 /**
- * Applies the given theme to the document:
- * 1. Updates meta[name="color-scheme"] content.
- * 2. Sets or removes data-theme="eclipse" on <html>.
- * 3. Updates aria-checked on theme radio options in the menu.
- * 4. Updates data-current-theme on the switcher container/trigger.
+ * Applies the given theme to the document.
  */
 export function applyTheme(theme: Theme, doc: Document = document): void {
   const root = doc.documentElement;
+  const colorScheme = toColorScheme(theme);
 
-  // 1. Update meta[name="color-scheme"]
-  let meta = doc.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
-  if (!meta) {
-    meta = doc.createElement('meta');
-    meta.name = 'color-scheme';
-    doc.head.appendChild(meta);
+  // 1. Update meta[name="color-scheme"] (cache + skip if already correct).
+  let meta = metaCache.get(doc);
+  if (!meta || meta.isConnected === false) {
+    meta = doc.querySelector<HTMLMetaElement>(COLOR_SCHEME_META) ?? undefined;
+
+    if (!meta) {
+      meta = doc.createElement('meta');
+      meta.name = 'color-scheme';
+      doc.head.appendChild(meta);
+    }
+
+    metaCache.set(doc, meta);
   }
-  meta.content = toColorScheme(theme);
 
-  // 2. Set or remove data-theme
+  if (meta.content !== colorScheme) {
+    meta.content = colorScheme;
+  }
+
+  // 2. Set or remove data-theme.
+  //    removeAttribute is a cheap no-op on real DOM when absent, and it
+  //    avoids relying on hasAttribute (which mock DOMs may not implement).
   const dataTheme = toDataTheme(theme);
   if (dataTheme) {
-    root.setAttribute('data-theme', dataTheme);
+    root.setAttribute(DATA_THEME, dataTheme);
   } else {
-    root.removeAttribute('data-theme');
+    root.removeAttribute(DATA_THEME);
   }
 
-  // 3. Update current theme marker on root and trigger
-  root.setAttribute('data-active-theme', theme);
+  // 3. Current theme marker.
+  root.setAttribute(DATA_ACTIVE_THEME, theme);
 
-  // 4. Update aria-checked and active classes on menu items
-  const options = doc.querySelectorAll<HTMLButtonElement>(
-    '[data-theme-option]',
-  );
-  for (const option of options) {
+  // 4. Menu radio state.
+  const options = doc.querySelectorAll<HTMLButtonElement>(THEME_OPTION);
+  const optionCount = options.length;
+
+  if (optionCount === 0) return;
+
+  for (let i = 0; i < optionCount; i++) {
+    const option = options[i];
     const isSelected = option.dataset.themeOption === theme;
-    option.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+
+    // Always write aria-checked (parity with original behaviour, and mocks
+    // do not emulate attribute state so skipping would suppress the call).
+    option.setAttribute(ARIA_CHECKED, isSelected ? 'true' : 'false');
+
     if (isSelected) {
-      option.classList.add('is-active');
+      option.classList.add(ACTIVE_CLASS);
     } else {
-      option.classList.remove('is-active');
+      option.classList.remove(ACTIVE_CLASS);
     }
   }
 }
@@ -64,9 +92,10 @@ export function persistTheme(
   try {
     if (theme === 'system') {
       storage.removeItem(STORAGE_KEY);
-    } else {
-      storage.setItem(STORAGE_KEY, theme);
+      return;
     }
+
+    storage.setItem(STORAGE_KEY, theme);
   } catch (_) {
     // Graceful fallback when storage is inaccessible
   }
@@ -84,22 +113,25 @@ export function initThemeSwitcher(
     ? window.localStorage
     : ({} as Storage),
 ): () => void {
-  // Sync menu radio state and document with stored theme on initialization
+  const hasWindow = typeof window !== 'undefined';
+
+  // Initial sync: keep this in try/catch because storage access can throw.
   try {
     const storedVal =
       typeof storage?.getItem === 'function'
         ? storage.getItem(STORAGE_KEY)
         : null;
-    const initialTheme = resolveTheme(storedVal);
-    applyTheme(initialTheme, doc);
+
+    applyTheme(resolveTheme(storedVal), doc);
   } catch (_) {
     // Graceful fallback if storage is inaccessible
   }
 
   const handleClick = (event: MouseEvent) => {
-    const target = (event.target as HTMLElement)?.closest<HTMLButtonElement>(
-      '[data-theme-option]',
+    const target = (event.target as Element | null)?.closest<HTMLButtonElement>(
+      THEME_OPTION,
     );
+
     if (!target) return;
 
     const chosenTheme = target.dataset.themeOption;
@@ -108,8 +140,7 @@ export function initThemeSwitcher(
     applyTheme(chosenTheme, doc);
     persistTheme(chosenTheme, storage);
 
-    // Close popover if supported
-    const popover = target.closest<HTMLElement>('[popover]');
+    const popover = target.closest<HTMLElement>(POPOVER);
     if (popover && typeof popover.hidePopover === 'function') {
       try {
         popover.hidePopover();
@@ -118,39 +149,52 @@ export function initThemeSwitcher(
       }
     }
 
-    // Return focus to trigger button
-    const trigger = doc.querySelector<HTMLButtonElement>(
-      '[data-theme-trigger]',
-    );
-    trigger?.focus();
+    doc.querySelector<HTMLButtonElement>(THEME_TRIGGER)?.focus();
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
     const activeEl = doc.activeElement as HTMLElement | null;
-    if (!activeEl?.matches('[data-theme-option]')) return;
 
-    const menu = activeEl.closest('[role="menu"]');
+    if (!activeEl?.matches(THEME_OPTION)) return;
+
+    const menu = activeEl.closest(THEME_MENU);
     if (!menu) return;
 
-    const items = Array.from(
-      menu.querySelectorAll<HTMLButtonElement>('[data-theme-option]'),
-    );
-    const currentIndex = items.indexOf(activeEl as HTMLButtonElement);
+    const items = menu.querySelectorAll<HTMLButtonElement>(THEME_OPTION);
+    const len = items.length;
+
+    if (len === 0) return;
+
+    const currentIndex = Array.prototype.indexOf.call(items, activeEl);
     if (currentIndex === -1) return;
 
-    let nextIndex = currentIndex;
-    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-      event.preventDefault();
-      nextIndex = (currentIndex + 1) % items.length;
-    } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-      event.preventDefault();
-      nextIndex = (currentIndex - 1 + items.length) % items.length;
-    } else if (event.key === 'Home') {
-      event.preventDefault();
-      nextIndex = 0;
-    } else if (event.key === 'End') {
-      event.preventDefault();
-      nextIndex = items.length - 1;
+    let nextIndex: number;
+
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowRight':
+        event.preventDefault();
+        nextIndex = (currentIndex + 1) % len;
+        break;
+
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        event.preventDefault();
+        nextIndex = (currentIndex - 1 + len) % len;
+        break;
+
+      case 'Home':
+        event.preventDefault();
+        nextIndex = 0;
+        break;
+
+      case 'End':
+        event.preventDefault();
+        nextIndex = len - 1;
+        break;
+
+      default:
+        return;
     }
 
     if (nextIndex !== currentIndex) {
@@ -159,23 +203,23 @@ export function initThemeSwitcher(
   };
 
   const handleStorage = (event: StorageEvent) => {
-    if (event.key === STORAGE_KEY) {
-      const updatedTheme = resolveTheme(event.newValue);
-      applyTheme(updatedTheme, doc);
-    }
+    if (event.key !== STORAGE_KEY) return;
+
+    applyTheme(resolveTheme(event.newValue), doc);
   };
 
   doc.addEventListener('click', handleClick);
   doc.addEventListener('keydown', handleKeyDown);
 
-  if (typeof window !== 'undefined') {
+  if (hasWindow) {
     window.addEventListener('storage', handleStorage);
   }
 
   return () => {
     doc.removeEventListener('click', handleClick);
     doc.removeEventListener('keydown', handleKeyDown);
-    if (typeof window !== 'undefined') {
+
+    if (hasWindow) {
       window.removeEventListener('storage', handleStorage);
     }
   };
