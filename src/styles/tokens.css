@@ -2,10 +2,13 @@
   /* Dynamic color-scheme mapping (Base: light dark) */
   color-scheme: light dark;
 
-  &:has(> head > meta[name="color-scheme"][content="dark"]) {
+  &:has(> head > meta[name="color-scheme"][content="dark"]),
+  &[data-active-theme="dark"] {
     color-scheme: dark;
   }
-  &:has(> head > meta[name="color-scheme"][content="light"]) {
+  &:has(> head > meta[name="color-scheme"][content="light"]),
+  &[data-active-theme="light"],
+  &[data-theme="eclipse"] {
     color-scheme: light;
   }
 
@@ -137,7 +140,8 @@
     }
   }
 
-  :root:has(> head > meta[name="color-scheme"][content="dark"]) {
+  :root:has(> head > meta[name="color-scheme"][content="dark"]),
+  :root[data-active-theme="dark"] {
     --colors-background: #050505;
     --colors-on-background: #dddbcb;
     --colors-surface: #141414;

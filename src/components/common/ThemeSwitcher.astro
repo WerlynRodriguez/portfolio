@@ -1,20 +1,20 @@
 ---
-import { type Locale, useTranslations } from "@i18n/utils";
-import { Icon } from "astro-icon/components";
-import { THEMES } from "@/lib/theme";
+import { type Locale, useTranslations } from '@i18n/utils';
+import { Icon } from 'astro-icon/components';
+import { THEMES } from '@/lib/theme';
 
 interface Props {
-    lang: Locale;
+  lang: Locale;
 }
 
 const { lang } = Astro.props;
-const t = useTranslations(lang, "theme");
+const t = useTranslations(lang, 'theme');
 
 const themeIcons = {
-    system: "device-desktop",
-    light: "sun",
-    dark: "moon",
-    eclipse: "eclipse",
+  system: 'device-desktop',
+  light: 'sun',
+  dark: 'moon',
+  eclipse: 'eclipse',
 } as const;
 ---
 

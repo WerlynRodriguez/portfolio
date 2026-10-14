@@ -21,51 +21,65 @@ const skipLabel = t('skip.link');
 <html lang={lang}>
     <head>
         <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="generator" content={Astro.generator} />
+        <meta id="cs" name="color-scheme" content="light dark" />
+
+        <script is:inline>
+            (function () {
+                var root = document.documentElement;
+                root.classList.add("js", "no-transition");
+
+                var THEMES = Object.freeze(
+                    Object.assign(Object.create(null), {
+                        dark: { cs: "dark", dataTheme: null },
+                        light: { cs: "light", dataTheme: null },
+                        eclipse: { cs: "light", dataTheme: "eclipse" },
+                    }),
+                );
+                var FALLBACK = Object.freeze({
+                    cs: "light dark",
+                    dataTheme: null,
+                });
+
+                try {
+                    var t = localStorage.getItem("theme");
+                    var cfg = (t && THEMES[t]) || FALLBACK;
+
+                    var meta = document.getElementById("cs") || document.querySelector('meta[name="color-scheme"]');
+                    if (meta) meta.setAttribute("content", cfg.cs);
+
+                    if (cfg.cs !== "light dark") {
+                        root.style.colorScheme = cfg.cs;
+                    }
+
+                    if (cfg.dataTheme) {
+                        root.setAttribute("data-theme", cfg.dataTheme);
+                    } else {
+                        root.removeAttribute("data-theme");
+                    }
+
+                    if (t) root.setAttribute("data-active-theme", t);
+                } catch (_) {}
+
+                window.addEventListener("DOMContentLoaded", function () {
+                    requestAnimationFrame(function () {
+                        root.classList.remove("no-transition");
+                    });
+                });
+            })();
+        </script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;800&family=Roboto+Mono:wght@400;500&family=Share+Tech+Mono&display=swap"
             rel="stylesheet"
         />
+
         <title>{title}</title>
         <meta name="description" content={description} />
-        <meta name="color-scheme" content="light dark" />
-        <script is:inline>
-            (function () {
-                try {
-                    var t = localStorage.getItem("theme");
-                    var cs =
-                        t === "dark"
-                            ? "dark"
-                            : t === "light" || t === "eclipse"
-                              ? "light"
-                              : "light dark";
-                    var meta = document.querySelector(
-                        'meta[name="color-scheme"]',
-                    );
-                    if (meta) meta.content = cs;
-                    if (t === "eclipse") {
-                        document.documentElement.setAttribute(
-                            "data-theme",
-                            "eclipse",
-                        );
-                    } else {
-                        document.documentElement.removeAttribute("data-theme");
-                    }
-                    if (t) {
-                        document.documentElement.setAttribute(
-                            "data-active-theme",
-                            t,
-                        );
-                    }
-                } catch (_) {}
-                document.documentElement.classList.add("js");
-            })();
-        </script>
+        <meta name="generator" content={Astro.generator} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
     </head>
     <body>
         <Header lang={lang} />

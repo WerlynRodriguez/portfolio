@@ -14,11 +14,8 @@ html {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  body,
-  .site-header,
-  .site-footer,
-  .cad-frame,
-  .btn-cad {
+  html:not(.no-transition)
+    :is(body, .site-header, .site-footer, .cad-frame, .btn-cad) {
     transition:
       background-color var(--transition-micro),
       color var(--transition-micro),

@@ -362,4 +362,80 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     expect(sendEmailOutline.style).toBe('dashed');
     expect(sendEmailOutline.offset).toBe('2px');
   });
+
+  test('prevents FOUC/FOIT when reloading light mode under dark OS preference (Spec 020 AC1)', async ({
+    page,
+  }) => {
+    // Emulate Dark Mode OS preference
+    await page.emulateMedia({ colorScheme: 'dark' });
+
+    // Store 'light' theme preference before document loads
+    await page.addInitScript(() => {
+      localStorage.setItem('theme', 'light');
+    });
+
+    await page.goto('/');
+
+    // 1. Meta tag must have id="cs" and content="light"
+    const meta = page.locator('#cs');
+    await expect(meta).toHaveAttribute('content', 'light');
+
+    // 2. html root must have data-active-theme="light"
+    const html = page.locator('html');
+    await expect(html).toHaveAttribute('data-active-theme', 'light');
+
+    // 3. Body computed background must be light (#fbfbfa / rgb(251, 251, 250)), never dark (#050505 / rgb(5, 5, 5))
+    const bodyBg = await page.locator('body').evaluate((el) => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+    expect(bodyBg).toBe('rgb(251, 251, 250)');
+  });
+
+  test('prevents FOUC/FOIT when reloading eclipse mode under dark OS preference (Spec 020 AC2)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'dark' });
+
+    await page.addInitScript(() => {
+      localStorage.setItem('theme', 'eclipse');
+    });
+
+    await page.goto('/');
+
+    const meta = page.locator('#cs');
+    await expect(meta).toHaveAttribute('content', 'light');
+
+    const html = page.locator('html');
+    await expect(html).toHaveAttribute('data-theme', 'eclipse');
+    await expect(html).toHaveAttribute('data-active-theme', 'eclipse');
+
+    // Header and CAD frames in eclipse should evaluate to dark
+    const headerColorScheme = await page
+      .locator('.site-header')
+      .evaluate((el) => window.getComputedStyle(el).colorScheme);
+    expect(headerColorScheme).toBe('dark');
+  });
+
+  test('prevents FOUC/FOIT when reloading dark mode under light OS preference (Spec 020 AC3)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+
+    await page.addInitScript(() => {
+      localStorage.setItem('theme', 'dark');
+    });
+
+    await page.goto('/');
+
+    const meta = page.locator('#cs');
+    await expect(meta).toHaveAttribute('content', 'dark');
+
+    const html = page.locator('html');
+    await expect(html).toHaveAttribute('data-active-theme', 'dark');
+
+    const bodyBg = await page.locator('body').evaluate((el) => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+    expect(bodyBg).toBe('rgb(5, 5, 5)');
+  });
 });

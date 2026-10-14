@@ -45,6 +45,14 @@ export function applyTheme(theme: Theme, doc: Document = document): void {
     meta.content = colorScheme;
   }
 
+  if (root.style) {
+    if (colorScheme !== 'light dark') {
+      root.style.colorScheme = colorScheme;
+    } else {
+      root.style.removeProperty('color-scheme');
+    }
+  }
+
   // 2. Set or remove data-theme.
   //    removeAttribute is a cheap no-op on real DOM when absent, and it
   //    avoids relying on hasAttribute (which mock DOMs may not implement).
