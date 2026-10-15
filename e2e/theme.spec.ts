@@ -26,12 +26,12 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     const systemBtn = menu.locator('[data-theme-option="system"]');
     const lightBtn = menu.locator('[data-theme-option="light"]');
     const darkBtn = menu.locator('[data-theme-option="dark"]');
-    const eclipseBtn = menu.locator('[data-theme-option="eclipse"]');
+    const beeBtn = menu.locator('[data-theme-option="bee"]');
 
     await expect(systemBtn).toBeVisible();
     await expect(lightBtn).toBeVisible();
     await expect(darkBtn).toBeVisible();
-    await expect(eclipseBtn).toBeVisible();
+    await expect(beeBtn).toBeVisible();
   });
 
   test('switches themes, updates DOM and persists across page reload (AC7)', async ({
@@ -48,10 +48,7 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     await menu.locator('[data-theme-option="light"]').click();
     await expect(menu).toBeHidden();
     await expect(meta).toHaveAttribute('content', 'light');
-    await expect(page.locator('html')).not.toHaveAttribute(
-      'data-theme',
-      'eclipse',
-    );
+    await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'bee');
 
     // Verify localStorage has 'light'
     const storedLight = await page.evaluate(() =>
@@ -63,27 +60,22 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     await page.reload();
     await expect(meta).toHaveAttribute('content', 'light');
 
-    // Select Eclipse theme
+    // Select Bee theme
     await trigger.click();
-    await menu.locator('[data-theme-option="eclipse"]').click();
+    await menu.locator('[data-theme-option="bee"]').click();
     await expect(menu).toBeHidden();
-    await expect(meta).toHaveAttribute('content', 'light');
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'eclipse');
+    await expect(meta).toHaveAttribute('content', 'dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'bee');
 
-    const storedEclipse = await page.evaluate(() =>
-      localStorage.getItem('theme'),
-    );
-    expect(storedEclipse).toBe('eclipse');
+    const storedBee = await page.evaluate(() => localStorage.getItem('theme'));
+    expect(storedBee).toBe('bee');
 
     // Select Dark theme
     await trigger.click();
     await menu.locator('[data-theme-option="dark"]').click();
     await expect(menu).toBeHidden();
     await expect(meta).toHaveAttribute('content', 'dark');
-    await expect(page.locator('html')).not.toHaveAttribute(
-      'data-theme',
-      'eclipse',
-    );
+    await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'bee');
 
     const storedDark = await page.evaluate(() => localStorage.getItem('theme'));
     expect(storedDark).toBe('dark');
@@ -116,29 +108,18 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     await expect(meta).toHaveAttribute('content', 'light dark');
   });
 
-  test('eclipse theme renders dark containers inside light page (AC9)', async ({
-    page,
-  }) => {
+  test('bee theme applies dark scheme and bee data-theme', async ({ page }) => {
     await page.goto('/');
 
     const trigger = page.locator('#theme-trigger-btn');
     const menu = page.locator('#theme-menu');
 
     await trigger.click();
-    await menu.locator('[data-theme-option="eclipse"]').click();
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'eclipse');
+    await menu.locator('[data-theme-option="bee"]').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'bee');
 
-    // Check header color-scheme evaluates to dark
-    const headerColorScheme = await page
-      .locator('.site-header')
-      .evaluate((el) => window.getComputedStyle(el).colorScheme);
-    expect(headerColorScheme).toBe('dark');
-
-    // Check footer color-scheme evaluates to dark
-    const footerColorScheme = await page
-      .locator('.site-footer')
-      .evaluate((el) => window.getComputedStyle(el).colorScheme);
-    expect(footerColorScheme).toBe('dark');
+    const meta = page.locator('meta[name="color-scheme"]');
+    await expect(meta).toHaveAttribute('content', 'dark');
   });
 
   test('supports keyboard navigation (Arrow keys, Home, End, Esc) (AC10)', async ({
@@ -178,7 +159,7 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
   }) => {
     await page.goto('/');
 
-    const themes = ['system', 'light', 'dark', 'eclipse'] as const;
+    const themes = ['system', 'light', 'dark', 'bee'] as const;
     const trigger = page.locator('#theme-trigger-btn');
     const menu = page.locator('#theme-menu');
 
@@ -223,31 +204,6 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     expect(color).not.toBe(bgColor);
   });
 
-  test('eclipse mode renders hero section as a CAD command deck with dark surface (Spec 017 AC3)', async ({
-    page,
-  }) => {
-    await page.goto('/');
-    const trigger = page.locator('#theme-trigger-btn');
-    const menu = page.locator('#theme-menu');
-
-    await trigger.click();
-    await menu.locator('[data-theme-option="eclipse"]').click();
-
-    const heroSection = page.locator('#hero');
-    await expect(heroSection).toHaveClass(/hero-console/);
-    await expect(heroSection).toHaveClass(/cad-frame/);
-
-    const heroColorScheme = await heroSection.evaluate(
-      (el) => window.getComputedStyle(el).colorScheme,
-    );
-    expect(heroColorScheme).toBe('dark');
-
-    const heroBg = await heroSection.evaluate(
-      (el) => window.getComputedStyle(el).backgroundColor,
-    );
-    expect(heroBg).not.toBe('rgba(0, 0, 0, 0)');
-  });
-
   test('persists menu radio selection state across page reload (Spec 018 AC4)', async ({
     page,
   }) => {
@@ -255,9 +211,9 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     const trigger = page.locator('#theme-trigger-btn');
     const menu = page.locator('#theme-menu');
 
-    // Select Eclipse
+    // Select Bee
     await trigger.click();
-    await menu.locator('[data-theme-option="eclipse"]').click();
+    await menu.locator('[data-theme-option="bee"]').click();
     await expect(menu).toBeHidden();
 
     // Reload the page
@@ -267,12 +223,12 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     await trigger.click();
     await expect(menu).toBeVisible();
 
-    // Check that Eclipse is aria-checked and has is-active class, and system is NOT aria-checked
-    const eclipseOption = menu.locator('[data-theme-option="eclipse"]');
+    // Check that Bee is aria-checked and has is-active class, and system is NOT aria-checked
+    const beeOption = menu.locator('[data-theme-option="bee"]');
     const systemOption = menu.locator('[data-theme-option="system"]');
 
-    await expect(eclipseOption).toHaveAttribute('aria-checked', 'true');
-    await expect(eclipseOption).toHaveClass(/is-active/);
+    await expect(beeOption).toHaveAttribute('aria-checked', 'true');
+    await expect(beeOption).toHaveClass(/is-active/);
     await expect(systemOption).toHaveAttribute('aria-checked', 'false');
   });
 
@@ -391,29 +347,28 @@ test.describe('ThemeSwitcher E2E & A11y Suite', () => {
     expect(bodyBg).toBe('rgb(251, 251, 250)');
   });
 
-  test('prevents FOUC/FOIT when reloading eclipse mode under dark OS preference (Spec 020 AC2)', async ({
+  test('prevents FOUC/FOIT when reloading bee mode under light OS preference (Spec 020 AC2)', async ({
     page,
   }) => {
-    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.emulateMedia({ colorScheme: 'light' });
 
     await page.addInitScript(() => {
-      localStorage.setItem('theme', 'eclipse');
+      localStorage.setItem('theme', 'bee');
     });
 
     await page.goto('/');
 
     const meta = page.locator('#cs');
-    await expect(meta).toHaveAttribute('content', 'light');
+    await expect(meta).toHaveAttribute('content', 'dark');
 
     const html = page.locator('html');
-    await expect(html).toHaveAttribute('data-theme', 'eclipse');
-    await expect(html).toHaveAttribute('data-active-theme', 'eclipse');
+    await expect(html).toHaveAttribute('data-theme', 'bee');
+    await expect(html).toHaveAttribute('data-active-theme', 'bee');
 
-    // Header and CAD frames in eclipse should evaluate to dark
-    const headerColorScheme = await page
-      .locator('.site-header')
-      .evaluate((el) => window.getComputedStyle(el).colorScheme);
-    expect(headerColorScheme).toBe('dark');
+    const bodyBg = await page.locator('body').evaluate((el) => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+    expect(bodyBg).toBe('rgb(15, 14, 10)');
   });
 
   test('prevents FOUC/FOIT when reloading dark mode under light OS preference (Spec 020 AC3)', async ({

@@ -126,7 +126,7 @@ describe('themeSwitcher client controller (R2 / AC3, AC4)', () => {
         role: 'menuitemradio',
       }),
       createMockElement('button', {
-        themeOption: 'eclipse',
+        themeOption: 'bee',
         role: 'menuitemradio',
       }),
     ];
@@ -173,15 +173,15 @@ describe('themeSwitcher client controller (R2 / AC3, AC4)', () => {
       expect(mockStorage.getItem(STORAGE_KEY)).toBeNull();
     });
 
-    it('stores literal theme when theme is light, dark, or eclipse', () => {
+    it('stores literal theme when theme is light, dark, or bee', () => {
       persistTheme('light', mockStorage);
       expect(mockStorage.setItem).toHaveBeenCalledWith(STORAGE_KEY, 'light');
 
       persistTheme('dark', mockStorage);
       expect(mockStorage.setItem).toHaveBeenCalledWith(STORAGE_KEY, 'dark');
 
-      persistTheme('eclipse', mockStorage);
-      expect(mockStorage.setItem).toHaveBeenCalledWith(STORAGE_KEY, 'eclipse');
+      persistTheme('bee', mockStorage);
+      expect(mockStorage.setItem).toHaveBeenCalledWith(STORAGE_KEY, 'bee');
     });
 
     it('handles throwing storage gracefully without throwing errors', () => {
@@ -211,13 +211,10 @@ describe('themeSwitcher client controller (R2 / AC3, AC4)', () => {
       expect(mockRoot.removeAttribute).toHaveBeenCalledWith('data-theme');
     });
 
-    it('sets data-theme="eclipse" and meta="light" for eclipse', () => {
-      applyTheme('eclipse', mockDoc as unknown as Document);
-      expect(mockMeta.content).toBe('light');
-      expect(mockRoot.setAttribute).toHaveBeenCalledWith(
-        'data-theme',
-        'eclipse',
-      );
+    it('sets data-theme="bee" and meta="dark" for bee', () => {
+      applyTheme('bee', mockDoc as unknown as Document);
+      expect(mockMeta.content).toBe('dark');
+      expect(mockRoot.setAttribute).toHaveBeenCalledWith('data-theme', 'bee');
     });
 
     it('sets meta="light dark" and clears data-theme for system', () => {
@@ -270,25 +267,25 @@ describe('themeSwitcher client controller (R2 / AC3, AC4)', () => {
     });
 
     it('initializes and applies the stored theme from storage to document and menu on startup (Spec 018 AC4)', () => {
-      mockStorage.getItem = vi.fn().mockReturnValue('eclipse');
+      mockStorage.getItem = vi.fn().mockReturnValue('bee');
 
       const cleanup = initThemeSwitcher(
         mockDoc as unknown as Document,
         mockStorage,
       );
 
-      const eclipseOption = mockOptions.find(
-        (o) => o.dataset.themeOption === 'eclipse',
+      const beeOption = mockOptions.find(
+        (o) => o.dataset.themeOption === 'bee',
       );
       const systemOption = mockOptions.find(
         (o) => o.dataset.themeOption === 'system',
       );
 
-      expect(eclipseOption?.setAttribute).toHaveBeenCalledWith(
+      expect(beeOption?.setAttribute).toHaveBeenCalledWith(
         'aria-checked',
         'true',
       );
-      expect(eclipseOption?.classList.add).toHaveBeenCalledWith('is-active');
+      expect(beeOption?.classList.add).toHaveBeenCalledWith('is-active');
       expect(systemOption?.setAttribute).toHaveBeenCalledWith(
         'aria-checked',
         'false',

@@ -23,13 +23,13 @@ describe('ThemeSwitcher component (R4 / AC5)', () => {
     expect(result).toContain('data-theme-option="system"');
     expect(result).toContain('data-theme-option="light"');
     expect(result).toContain('data-theme-option="dark"');
-    expect(result).toContain('data-theme-option="eclipse"');
+    expect(result).toContain('data-theme-option="bee"');
 
     // English labels
     expect(result).toContain('System');
     expect(result).toContain('Light');
     expect(result).toContain('Dark');
-    expect(result).toContain('Eclipse');
+    expect(result).toContain('Bee');
   });
 
   it('renders localized Spanish labels when lang="es"', async () => {
@@ -41,6 +41,6 @@ describe('ThemeSwitcher component (R4 / AC5)', () => {
     expect(result).toContain('Sistema');
     expect(result).toContain('Claro');
     expect(result).toContain('Oscuro');
-    expect(result).toContain('Eclipse');
+    expect(result).toContain('Abeja');
   });
 });

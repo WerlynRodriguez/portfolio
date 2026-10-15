@@ -4,7 +4,7 @@ export default {
   'option.system': 'System',
   'option.light': 'Light',
   'option.dark': 'Dark',
-  'option.eclipse': 'Eclipse',
+  'option.bee': 'Bee',
   'hint.dark': 'dark',
   'hint.light': 'light',
 } as const;

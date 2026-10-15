@@ -1,7 +1,7 @@
 /**
  * Available theme modes.
  */
-export const THEMES = ['system', 'light', 'dark', 'eclipse'] as const;
+export const THEMES = ['system', 'light', 'dark', 'bee'] as const;
 
 /**
  * Union type representing all valid theme options.
@@ -39,7 +39,7 @@ export function resolveTheme(stored: string | null | undefined): Theme {
 
 /**
  * Maps a theme to the standard CSS `color-scheme` value for meta[name="color-scheme"].
- * Eclipse uses 'light' at the document level with component-level dark overrides.
+ * Bee uses 'dark' at the document level with warm honey/yellow styling tokens.
  */
 export function toColorScheme(theme: Theme): 'light dark' | 'light' | 'dark' {
   switch (theme) {
@@ -47,8 +47,8 @@ export function toColorScheme(theme: Theme): 'light dark' | 'light' | 'dark' {
       return 'light';
     case 'dark':
       return 'dark';
-    case 'eclipse':
-      return 'light';
+    case 'bee':
+      return 'dark';
     default:
       return 'light dark';
   }
@@ -56,8 +56,8 @@ export function toColorScheme(theme: Theme): 'light dark' | 'light' | 'dark' {
 
 /**
  * Maps a theme to data-theme attribute value on the root HTML element.
- * Only 'eclipse' requires data-theme="eclipse"; standard light/dark/system rely purely on color-scheme.
+ * 'bee' requires data-theme="bee"; standard light/dark/system rely purely on color-scheme.
  */
-export function toDataTheme(theme: Theme): 'eclipse' | null {
-  return theme === 'eclipse' ? 'eclipse' : null;
+export function toDataTheme(theme: Theme): 'bee' | null {
+  return theme === 'bee' ? 'bee' : null;
 }

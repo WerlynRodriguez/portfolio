@@ -3,12 +3,12 @@
   color-scheme: light dark;
 
   &:has(> head > meta[name="color-scheme"][content="dark"]),
-  &[data-active-theme="dark"] {
+  &[data-active-theme="dark"],
+  &[data-theme="bee"] {
     color-scheme: dark;
   }
   &:has(> head > meta[name="color-scheme"][content="light"]),
-  &[data-active-theme="light"],
-  &[data-theme="eclipse"] {
+  &[data-active-theme="light"] {
     color-scheme: light;
   }
 
@@ -163,10 +163,35 @@
   }
 }
 
-/* Eclipse theme: Hybrid layout where containers render dark inside a light page */
-:root[data-theme="eclipse"]
-:is(.site-header, .site-footer, .cad-frame, .hero-section, .hero-console) {
+/* Bee theme: Warm honey, amber, and golden yellow with dark honeycomb charcoal base */
+:root[data-theme="bee"] {
   color-scheme: dark;
-  background-color: var(--colors-surface);
-  color: var(--colors-on-surface);
+  --colors-background: #0f0e0a;
+  --colors-on-background: #fef08a;
+  --colors-surface: #18160f;
+  --colors-surface-dim: #0a0906;
+  --colors-surface-elevated: #232015;
+  --colors-on-surface: #fef9c3;
+  --colors-on-surface-muted: #d4a34b;
+  --colors-primary: #eab308;
+  --colors-on-primary: #0a0906;
+  --colors-primary-light: #fbbf24;
+  --colors-on-primary-light: #0a0906;
+  --colors-secondary: #f97316;
+  --colors-on-secondary: #0a0906;
+  --colors-punctual: #f97316;
+  --colors-on-punctual: #050505;
+  --colors-punctual-dark: #ea580c;
+  --colors-on-punctual-dark: #ffffff;
+  --colors-outline: #eab308;
+  --colors-outline-subtle: #423b20;
+  --colors-inverse-background: #fefce8;
+  --colors-inverse-on-background: #1c1917;
+  --colors-inverse-surface: #ffffff;
+  --colors-inverse-on-surface: #1c1917;
+  --colors-inverse-outline: #1c1917;
+  --colors-inverse-outline-subtle: #d6d4c8;
+  --grid-dot-color: rgba(234, 179, 8, 0.12);
+  accent-color: var(--colors-primary);
+  scrollbar-color: var(--colors-outline-subtle) var(--colors-surface);
 }

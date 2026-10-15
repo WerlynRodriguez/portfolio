@@ -4,5 +4,6 @@ import { getViteConfig } from 'astro/config';
 export default getViteConfig({
   test: {
     include: ['src/**/*.{test,spec}.{ts,js}'],
+    fsModuleCache: true,
   },
 });

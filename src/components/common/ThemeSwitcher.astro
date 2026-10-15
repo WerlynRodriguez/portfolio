@@ -14,7 +14,7 @@ const themeIcons = {
   system: 'device-desktop',
   light: 'sun',
   dark: 'moon',
-  eclipse: 'eclipse',
+  bee: 'bee',
 } as const;
 ---
 
@@ -36,7 +36,7 @@ const themeIcons = {
             />
             <Icon name="sun" size={18} class="icon-theme icon-light" />
             <Icon name="moon" size={18} class="icon-theme icon-dark" />
-            <Icon name="eclipse" size={18} class="icon-theme icon-eclipse" />
+            <Icon name="bee" size={18} class="icon-theme icon-bee" />
         </span>
     </button>
 
@@ -144,7 +144,7 @@ const themeIcons = {
         display: inline-flex;
     }
 
-    :global(:root[data-active-theme="eclipse"]) .icon-eclipse {
+    :global(:root[data-active-theme="bee"]) .icon-bee {
         display: inline-flex;
     }
 

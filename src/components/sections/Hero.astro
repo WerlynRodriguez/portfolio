@@ -29,10 +29,13 @@ const lastNameChars = t('lastName').split('');
         <div class="hero-content">
             <h1 id="hero-heading" class="hero-name">
                 <span class="first-name">{t("title")}</span>
-                <span class="last-name" aria-label={t("lastName")}>
-                    {lastNameChars.map((char) => (
-                        <span aria-hidden="true">{char}</span>
-                    ))}
+                <span class="last-name">
+                    <span class="sr-only">{t("lastName")}</span>
+                    <span aria-hidden="true" class="last-name-chars">
+                        {lastNameChars.map((char) => (
+                            <span>{char}</span>
+                        ))}
+                    </span>
                 </span>
             </h1>
 

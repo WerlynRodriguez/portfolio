@@ -11,7 +11,7 @@ import {
 
 describe('theme utilities (R1 / AC1, AC2)', () => {
   it('exports valid themes and storage key', () => {
-    expect(THEMES).toEqual(['system', 'light', 'dark', 'eclipse']);
+    expect(THEMES).toEqual(['system', 'light', 'dark', 'bee']);
     expect(DEFAULT_THEME).toBe('system');
     expect(STORAGE_KEY).toBe('theme');
   });
@@ -21,7 +21,7 @@ describe('theme utilities (R1 / AC1, AC2)', () => {
       expect(isTheme('system')).toBe(true);
       expect(isTheme('light')).toBe(true);
       expect(isTheme('dark')).toBe(true);
-      expect(isTheme('eclipse')).toBe(true);
+      expect(isTheme('bee')).toBe(true);
 
       expect(isTheme('invalid')).toBe(false);
       expect(isTheme(null)).toBe(false);
@@ -35,7 +35,7 @@ describe('theme utilities (R1 / AC1, AC2)', () => {
       expect(resolveTheme('system')).toBe('system');
       expect(resolveTheme('light')).toBe('light');
       expect(resolveTheme('dark')).toBe('dark');
-      expect(resolveTheme('eclipse')).toBe('eclipse');
+      expect(resolveTheme('bee')).toBe('bee');
     });
 
     it('falls back to DEFAULT_THEME for missing or unknown values', () => {
@@ -51,13 +51,13 @@ describe('theme utilities (R1 / AC1, AC2)', () => {
       expect(toColorScheme('system')).toBe('light dark');
       expect(toColorScheme('light')).toBe('light');
       expect(toColorScheme('dark')).toBe('dark');
-      expect(toColorScheme('eclipse')).toBe('light');
+      expect(toColorScheme('bee')).toBe('dark');
     });
   });
 
   describe('toDataTheme (AC2)', () => {
-    it('returns "eclipse" only for eclipse theme and null otherwise', () => {
-      expect(toDataTheme('eclipse')).toBe('eclipse');
+    it('returns "bee" only for bee theme and null otherwise', () => {
+      expect(toDataTheme('bee')).toBe('bee');
       expect(toDataTheme('system')).toBeNull();
       expect(toDataTheme('light')).toBeNull();
       expect(toDataTheme('dark')).toBeNull();
