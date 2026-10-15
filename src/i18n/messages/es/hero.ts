@@ -1,6 +1,6 @@
 export default {
   title: 'WERLYN',
-  lastName: 'Rodriguez',
+  lastName: 'RODRIGUEZ',
   'role.label': 'Rol',
   'role.value': 'Software & Agentic AI Developer',
   'stack.label': 'Stack',

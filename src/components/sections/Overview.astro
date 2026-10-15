@@ -11,31 +11,45 @@ const t = useTranslations(lang, 'overview');
 ---
 
 <section
-    id="overview"
-    class="overview-section"
-    aria-labelledby="overview-heading"
+  id="overview"
+  class="overview-section"
+  aria-labelledby="overview-heading"
 >
-    <SectionHeader
-        prefix="0x01"
-        title={t("heading")}
-        subtitle={t("subtitle")}
-        id="overview-heading"
-    />
-    <div class="overview-content">
-        <p>{t("content")}</p>
-    </div>
+  <SectionHeader
+    prefix="0x01"
+    title={t('heading')}
+    subtitle={t('subtitle')}
+    id="overview-heading"
+  />
+  <div class="overview-content">
+    <p class="overview-body" set:html={t('p1')} />
+    <p class="overview-body" set:html={t('p2')} />
+  </div>
 </section>
 
 <style>
-    .overview-section {
-        /*padding: clamp(20px, 4vw, 36px);*/
-    }
-    .overview-content {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        color: var(--colors-on-surface);
-        max-width: 70ch;
-        line-height: 1.7;
-    }
+  .overview-section {
+    /* Section container styling */
+  }
+
+  .overview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 68ch;
+    text-align: left;
+    letter-spacing: -0.5px;
+  }
+
+  .overview-body {
+    font-size: clamp(0.875rem, 1.2vw, 0.9375rem);
+    color: var(--colors-on-surface);
+    line-height: 1.75;
+    letter-spacing: -0.5px;
+  }
+
+  .overview-content :global(strong.accent) {
+    color: var(--colors-primary-light);
+    font-weight: var(--font-weight-medium);
+  }
 </style>
