@@ -37,6 +37,7 @@ body {
   );
   background-size: var(--grid-spacing) var(--grid-spacing);
   background-repeat: repeat;
+  counter-reset: figure-counter;
 }
 
 /* Page structural framework */
@@ -207,9 +208,9 @@ h6 {
   background-color: var(--colors-primary);
   color: var(--colors-on-primary);
   cursor: pointer;
-  /*outline: 2px dashed transparent;*/
   outline-offset: 6px;
   transition:
+    transform var(--transition-micro),
     background-color var(--transition-micro),
     border-color var(--transition-micro),
     color var(--transition-micro),
