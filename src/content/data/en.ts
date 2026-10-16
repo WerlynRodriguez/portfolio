@@ -16,7 +16,6 @@ export const experienceRoles: RoleItem[] = [
       end: '2025-09',
       endLabel: 'Sep 2025',
     },
-    duration: '5 months',
     summary:
       'Security patrol management app for guards and supervisors, shipped as one Kotlin Multiplatform codebase.',
     responsibilities: [
@@ -38,7 +37,6 @@ export const experienceRoles: RoleItem[] = [
       end: '2023-06',
       endLabel: 'Jun 2023',
     },
-    duration: '1 yr 8 mos',
     summary:
       'Multi-user web platform with roles and scheduling for clinical therapy administration.',
     responsibilities: [

@@ -1,20 +1,22 @@
 ---
-import type { Locale } from "@/i18n/utils";
-import { calculateDuration } from "@/lib/duration";
-import type { RoleItem } from "@/types/data";
+import type { Locale } from '@/i18n/utils';
+import { calculateDuration } from '@/lib/duration';
+import type { RoleItem } from '@/types/data';
 
 interface Props {
-    role: RoleItem;
-    presentLabel: string;
-    stackLabel?: string;
-    lang?: Locale;
+  role: RoleItem;
+  presentLabel: string;
+  stackLabel?: string;
+  lang?: Locale;
 }
 
-const { role, presentLabel, stackLabel = "STACK", lang = "en" } = Astro.props;
+const { role, presentLabel, stackLabel = 'STACK', lang = 'en' } = Astro.props;
 
-const calculatedDuration =
-    role.duration ||
-    calculateDuration(role.period.start, role.period.end, lang);
+const calculatedDuration = calculateDuration(
+  role.period.start,
+  role.period.end,
+  lang,
+);
 ---
 
 <article class="experience-card cad-frame">

@@ -16,7 +16,6 @@ export const experienceRoles: RoleItem[] = [
       end: '2025-09',
       endLabel: 'Sep 2025',
     },
-    duration: '5 meses',
     summary:
       'App de gestión de patrullaje de seguridad para guardias y supervisores, desarrollada en un único codebase Kotlin Multiplatform.',
     responsibilities: [
@@ -38,7 +37,6 @@ export const experienceRoles: RoleItem[] = [
       end: '2023-06',
       endLabel: 'Jun 2023',
     },
-    duration: '1 año 8 meses',
     summary:
       'Plataforma web multiusuario con roles y agenda para la gestión y administración de servicios terapéuticos.',
     responsibilities: [

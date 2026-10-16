@@ -1,157 +1,201 @@
 import type { Locale } from '@/i18n/utils';
 
-const MONTH_MAP: Record<string, number> = {
-  // English
-  jan: 1,
-  january: 1,
-  feb: 2,
-  february: 2,
-  mar: 3,
-  march: 3,
-  apr: 4,
-  april: 4,
-  may: 5,
-  jun: 6,
-  june: 6,
-  jul: 7,
-  july: 7,
-  aug: 8,
-  august: 8,
-  sep: 9,
-  september: 9,
-  oct: 10,
-  october: 10,
-  nov: 11,
-  november: 11,
-  dec: 12,
-  december: 12,
-  // Spanish
-  ene: 1,
-  enero: 1,
-  febr: 2,
-  febrero: 2,
-  mzo: 3,
-  marzo: 3,
-  abr: 4,
-  abril: 4,
-  mayo: 5,
-  junio: 6,
-  julio: 7,
-  ago: 8,
-  agosto: 8,
-  sept: 9,
-  set: 9,
-  septiembre: 9,
-  setiembre: 9,
-  octubre: 10,
-  noviembre: 11,
-  dic: 12,
-  diciembre: 12,
-};
-
 interface YearMonth {
   year: number;
-  month: number;
+  month: number; // 1-12
 }
 
-/**
- * Parses date strings such as:
- * - ISO: '2025-05', '2025-05-15', '2025'
- * - Human: 'May 2025', 'Sep 2025', 'Mayo 2025', 'Noviembre 2021'
- */
-function parseYearMonth(input?: string): YearMonth | null {
+const MONTHS_PER_YEAR = 12;
+
+const ISO_RE = /^(\d{4})(?:-(\d{1,2})(?:-\d{1,2})?)?(?=$|[T\s])/;
+const WORD_SPLIT_RE = /[\s,.-]+/;
+const YEAR_RE = /^\d{4}$/;
+const PRESENT_TERMS = new Set(['present', 'presente']);
+
+interface DurationInput {
+  years?: number;
+  months?: number;
+}
+
+interface IntlDurationFormat {
+  format(duration: DurationInput): string;
+}
+
+type IntlDurationFormatConstructor = new (
+  locale: string,
+  options?: { style?: 'long' | 'short' | 'narrow' },
+) => IntlDurationFormat;
+
+const monthMapCache = new Map<string, Map<string, number>>();
+const unitFormatterCache = new Map<string, Intl.NumberFormat>();
+const durationFormatterCache = new Map<string, IntlDurationFormat>();
+
+function normalizeWord(word: string): string {
+  return word
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function getMonthMap(locales: string[]): Map<string, number> {
+  const key = locales.join('|');
+  const cached = monthMapCache.get(key);
+  if (cached) return cached;
+
+  const map = new Map<string, number>();
+
+  for (const locale of locales) {
+    for (const monthStyle of ['long', 'short'] as const) {
+      const dtf = new Intl.DateTimeFormat(locale, {
+        month: monthStyle,
+        timeZone: 'UTC',
+      });
+
+      for (let m = 0; m < MONTHS_PER_YEAR; m++) {
+        const date = new Date(Date.UTC(2020, m, 1));
+        map.set(normalizeWord(dtf.format(date)), m + 1);
+      }
+    }
+  }
+
+  // Aliases not always produced by Intl
+  map.set('sept', 9);
+  map.set('set', 9);
+  map.set('sep', 9);
+
+  monthMapCache.set(key, map);
+  return map;
+}
+
+function parseYearMonth(
+  input: string | undefined,
+  locales: string[],
+): YearMonth | null {
   if (!input) return null;
-  const trimmed = input.trim().toLowerCase();
+
+  const trimmed = input.trim();
   if (!trimmed) return null;
 
-  // 1. Check ISO format (YYYY-MM or YYYY-MM-DD or YYYY)
-  const isoMatch = trimmed.match(/^(\d{4})(?:-(\d{1,2}))?/);
+  const isoMatch = trimmed.match(ISO_RE);
   if (isoMatch) {
     const year = Number.parseInt(isoMatch[1], 10);
     const month = isoMatch[2] ? Number.parseInt(isoMatch[2], 10) : 1;
+
     if (month >= 1 && month <= 12) {
       return { year, month };
     }
   }
 
-  // 2. Check "Month Year" format (e.g. "May 2025", "Mayo 2025", "Nov 2021")
-  const words = trimmed.split(/[\s,.-]+/);
-  if (words.length >= 2) {
-    let year: number | null = null;
-    let month: number | null = null;
+  const words = trimmed.toLowerCase().split(WORD_SPLIT_RE);
+  if (words.length < 2) return null;
 
-    for (const part of words) {
-      if (/^\d{4}$/.test(part)) {
-        year = Number.parseInt(part, 10);
-      } else if (MONTH_MAP[part]) {
-        month = MONTH_MAP[part];
-      }
-    }
+  const monthMap = getMonthMap(locales);
 
-    if (year !== null && month !== null) {
-      return { year, month };
+  let year: number | null = null;
+  let month: number | null = null;
+
+  for (const rawPart of words) {
+    const part = normalizeWord(rawPart);
+    if (!part) continue;
+
+    if (YEAR_RE.test(part)) {
+      year = Number.parseInt(part, 10);
+    } else {
+      const m = monthMap.get(part);
+      if (m !== undefined) month = m;
     }
   }
 
-  return null;
+  return year !== null && month !== null ? { year, month } : null;
 }
 
-/**
- * Calculates total inclusive months between two dates and formats as a localized duration string.
- * Supports ongoing roles if end is undefined, empty, 'Present', or 'Presente'.
- */
+function getUnitFormatter(
+  locale: string,
+  unit: 'year' | 'month',
+): Intl.NumberFormat {
+  const key = `${locale}|${unit}`;
+  let fmt = unitFormatterCache.get(key);
+
+  if (!fmt) {
+    fmt = new Intl.NumberFormat(locale, {
+      style: 'unit',
+      unit,
+      unitDisplay: 'long', // use 'short' if you want "yr/mo"
+    });
+    unitFormatterCache.set(key, fmt);
+  }
+
+  return fmt;
+}
+
+function formatDuration(totalMonths: number, locale: string): string {
+  const years = Math.floor(totalMonths / MONTHS_PER_YEAR);
+  const months = totalMonths % MONTHS_PER_YEAR;
+
+  const DurationFormat = (
+    Intl as unknown as { DurationFormat?: IntlDurationFormatConstructor }
+  ).DurationFormat;
+
+  if (typeof DurationFormat === 'function') {
+    const key = `${locale}|duration`;
+    let df = durationFormatterCache.get(key);
+
+    if (!df) {
+      df = new DurationFormat(locale, { style: 'long' });
+      durationFormatterCache.set(key, df);
+    }
+
+    const duration: DurationInput = {};
+    if (years) duration.years = years;
+    if (months) duration.months = months;
+
+    return df.format(duration);
+  }
+
+  const parts: string[] = [];
+
+  if (years) {
+    parts.push(getUnitFormatter(locale, 'year').format(years));
+  }
+
+  if (months) {
+    parts.push(getUnitFormatter(locale, 'month').format(months));
+  }
+
+  return parts.join(' ');
+}
+
 export function calculateDuration(
   startInput: string,
   endInput?: string,
   locale: Locale = 'en',
   now: Date = new Date(),
 ): string {
-  const start = parseYearMonth(startInput);
+  const locales = [locale, 'en'];
+
+  const start = parseYearMonth(startInput, locales);
   if (!start) return '';
 
-  let end: YearMonth | null = null;
   const trimmedEnd = endInput?.trim().toLowerCase();
 
-  if (!trimmedEnd || trimmedEnd === 'present' || trimmedEnd === 'presente') {
+  let end: YearMonth | null;
+
+  if (!trimmedEnd || PRESENT_TERMS.has(trimmedEnd)) {
     end = {
       year: now.getUTCFullYear(),
       month: now.getUTCMonth() + 1,
     };
   } else {
-    end = parseYearMonth(endInput);
+    end = parseYearMonth(endInput, locales);
   }
 
   if (!end) return '';
 
   const totalMonths =
-    (end.year - start.year) * 12 + (end.month - start.month) + 1;
-  if (totalMonths <= 0) return '';
+    (end.year - start.year) * MONTHS_PER_YEAR + (end.month - start.month) + 1; // inclusive
 
-  const years = Math.floor(totalMonths / 12);
-  const remainingMonths = totalMonths % 12;
+  if (totalMonths < 1) return '';
 
-  if (years === 0) {
-    if (locale === 'es') {
-      return totalMonths === 1 ? '1 mes' : `${totalMonths} meses`;
-    }
-    return totalMonths === 1 ? '1 month' : `${totalMonths} months`;
-  }
-
-  if (remainingMonths === 0) {
-    if (locale === 'es') {
-      return years === 1 ? '1 año' : `${years} años`;
-    }
-    return years === 1 ? '1 yr' : `${years} yrs`;
-  }
-
-  // Years + remaining months
-  if (locale === 'es') {
-    const yrStr = years === 1 ? '1 año' : `${years} años`;
-    const moStr = remainingMonths === 1 ? '1 mes' : `${remainingMonths} meses`;
-    return `${yrStr} ${moStr}`;
-  }
-
-  const yrStr = years === 1 ? '1 yr' : `${years} yrs`;
-  const moStr = remainingMonths === 1 ? '1 mo' : `${remainingMonths} mos`;
-  return `${yrStr} ${moStr}`;
+  return formatDuration(totalMonths, locale);
 }
