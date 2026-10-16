@@ -92,6 +92,21 @@
   /* Browser UI */
   accent-color: var(--colors-primary);
   scrollbar-color: var(--colors-outline-subtle) var(--colors-surface);
+
+  /* Tech Pill Tokens */
+  --pill-main-color: var(--colors-primary-light);
+  --pill-main-bg: color-mix(in srgb, var(--pill-main-color) 14%, transparent);
+  --pill-main-border: color-mix(
+    in srgb,
+    var(--pill-main-color) 42%,
+    transparent
+  );
+  --pill-secondary-color: var(--colors-on-surface-muted);
+  --pill-secondary-border: color-mix(
+    in srgb,
+    var(--colors-outline-subtle) 60%,
+    transparent
+  );
 }
 
 /* Fallback for legacy browsers without light-dark() support */
@@ -194,4 +209,19 @@
   --grid-dot-color: rgba(234, 179, 8, 0.12);
   accent-color: var(--colors-primary);
   scrollbar-color: var(--colors-outline-subtle) var(--colors-surface);
+
+  /* Tech Pill Tokens (Bee) */
+  --pill-main-color: var(--colors-primary);
+  --pill-main-bg: color-mix(in srgb, var(--colors-primary) 14%, transparent);
+  --pill-main-border: color-mix(
+    in srgb,
+    var(--colors-primary) 42%,
+    transparent
+  );
+  --pill-secondary-color: var(--colors-on-surface-muted);
+  --pill-secondary-border: color-mix(
+    in srgb,
+    var(--colors-outline-subtle) 60%,
+    transparent
+  );
 }

@@ -7,14 +7,47 @@ import type {
 
 export const experienceRoles: RoleItem[] = [
   {
-    title: 'Most recent Job',
-    period: { start: '2024' },
-    description: 'Desc here',
+    title: 'Ingeniero Android',
+    company: 'Ultranic',
+    location: 'Remoto',
+    period: {
+      start: '2025-05',
+      startLabel: 'Mayo 2025',
+      end: '2025-09',
+      endLabel: 'Sep 2025',
+    },
+    duration: '5 meses',
+    summary:
+      'App de gestión de patrullaje de seguridad para guardias y supervisores, desarrollada en un único codebase Kotlin Multiplatform.',
+    responsibilities: [
+      'Notificaciones de rondas y escaneo QR para validar la ubicación del guardia en cada punto.',
+      'Seguimiento en tiempo real para supervisores mediante un sistema de doble rol (guardia y supervisor).',
+      'Geolocalización offline optimizada con corrutinas.',
+      'Registro de incidentes con exportación a PDF y vista de historial en tiempo real.',
+    ],
+    primaryTech: ['Kotlin', 'Jetpack Compose', '.NET'],
+    secondaryTech: ['Room', 'Android Studio'],
   },
   {
-    title: 'Most relevant Job',
-    period: { start: '2022', end: '2024' },
-    description: 'Desc here',
+    title: 'Desarrollador Full Stack',
+    company: 'Clínica Nancurunaisa',
+    location: 'Nicaragua',
+    period: {
+      start: '2021-11',
+      startLabel: 'Nov 2021',
+      end: '2023-06',
+      endLabel: 'Jun 2023',
+    },
+    duration: '1 año 8 meses',
+    summary:
+      'Plataforma web multiusuario con roles y agenda para la gestión y administración de servicios terapéuticos.',
+    responsibilities: [
+      'Frontend con rutas protegidas por rol y gestión de calendario de atención.',
+      'Pipeline de facturación digital: datos de servicio → PDF automático → reducción del 90% en costos de impresión.',
+      'Notificaciones push en tiempo real para recordatorios de citas.',
+    ],
+    primaryTech: ['React', '.NET', 'GraphQL'],
+    secondaryTech: ['React Router', 'Microsoft SQL Server Express'],
   },
 ];
 

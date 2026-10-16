@@ -1,4 +1,5 @@
 ---
+import ExperienceCard from '@components/common/ExperienceCard.astro';
 import SectionHeader from '@components/common/SectionHeader.astro';
 import { experienceRoles as enRoles } from '@content/data/en';
 import { experienceRoles as esRoles } from '@content/data/es';
@@ -27,25 +28,12 @@ const roles = lang === 'es' ? esRoles : enRoles;
     <ol class="timeline-list">
         {roles.map((role) => (
             <li class="timeline-item">
-                <article class="timeline-card cad-frame">
-                    <header class="timeline-header separator">
-                        <h3 class="timeline-title">{role.title}</h3>
-                        <p class="timeline-period tag-cad">
-                            <time datetime={role.period.start}>
-                                {role.period.start}
-                            </time>
-                            <span> — </span>
-                            {role.period.end ? (
-                                <time datetime={role.period.end}>
-                                    {role.period.end}
-                                </time>
-                            ) : (
-                                <span>{t("present")}</span>
-                            )}
-                        </p>
-                    </header>
-                    <p class="timeline-desc">{role.description}</p>
-                </article>
+                <ExperienceCard
+                    role={role}
+                    presentLabel={t("present")}
+                    stackLabel={t("stack")}
+                    lang={lang}
+                />
             </li>
         ))}
     </ol>
@@ -64,29 +52,5 @@ const roles = lang === 'es' ? esRoles : enRoles;
         display: flex;
         flex-direction: column;
         gap: 20px;
-    }
-    .timeline-card {
-        padding: clamp(20px, 3vw, 28px);
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-    }
-    .timeline-header {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 12px;
-
-        padding-bottom: 10px;
-    }
-    .timeline-title {
-        font-size: var(--font-size-h3);
-        margin: 0;
-    }
-    .timeline-desc {
-        color: var(--colors-on-surface-muted);
-        line-height: 1.6;
-        margin: 0;
     }
 </style>

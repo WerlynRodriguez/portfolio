@@ -59,7 +59,7 @@ test.describe('Home Page (English)', () => {
     }
 
     const experienceText = await page.locator('#experience').innerText();
-    expect(experienceText).toContain('Present');
+    expect(experienceText).toContain('Ultranic');
   });
 
   test('renders contact section with copy email bar, mailto button, and socials', async ({
@@ -183,7 +183,7 @@ test.describe('Home Page (Spanish)', () => {
     }
 
     const experienceText = await page.locator('#experience').innerText();
-    expect(experienceText).toContain('Presente');
+    expect(experienceText).toContain('Ultranic');
   });
 
   test('renders contact section in Spanish with copy email bar, mailto button, and socials', async ({

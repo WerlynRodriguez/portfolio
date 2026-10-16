@@ -1,10 +1,18 @@
 export interface RoleItem {
   title: string;
+  company: string;
+  location: string;
   period: {
     start: string;
+    startLabel: string;
     end?: string;
+    endLabel?: string;
   };
-  description: string;
+  duration?: string;
+  summary: string;
+  responsibilities: string[];
+  primaryTech: string[];
+  secondaryTech: string[];
 }
 
 export interface AcademicItem {

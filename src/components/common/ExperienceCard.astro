@@ -1,0 +1,273 @@
+---
+import type { Locale } from "@/i18n/utils";
+import { calculateDuration } from "@/lib/duration";
+import type { RoleItem } from "@/types/data";
+
+interface Props {
+    role: RoleItem;
+    presentLabel: string;
+    stackLabel?: string;
+    lang?: Locale;
+}
+
+const { role, presentLabel, stackLabel = "STACK", lang = "en" } = Astro.props;
+
+const calculatedDuration =
+    role.duration ||
+    calculateDuration(role.period.start, role.period.end, lang);
+---
+
+<article class="experience-card cad-frame">
+    <header class="card-header">
+        <div class="role-identity">
+            <h3 class="role-title">{role.title}</h3>
+            <p class="role-meta">
+                <span class="company">{role.company}</span>
+                <span class="meta-dot" aria-hidden="true">
+                    ·
+                </span>
+                <span class="location">{role.location}</span>
+            </p>
+        </div>
+        <div class="role-timing">
+            <p class="role-period">
+                <time datetime={role.period.start}>
+                    {role.period.startLabel}
+                </time>
+                <span class="period-sep" aria-hidden="true">
+                    {" "}
+                    —{" "}
+                </span>
+                {role.period.end ? (
+                    <time datetime={role.period.end}>
+                        {role.period.endLabel}
+                    </time>
+                ) : (
+                    <span>{presentLabel}</span>
+                )}
+            </p>
+            {calculatedDuration && (
+                <span class="role-duration">{calculatedDuration}</span>
+            )}
+        </div>
+    </header>
+
+    {role.summary && <p class="role-summary">{role.summary}</p>}
+
+    <ul class="role-responsibilities">
+        {role.responsibilities.map((bullet) => (
+            <li class="responsibility-item">{bullet}</li>
+        ))}
+    </ul>
+
+    <footer class="role-stack-footer">
+        <span class="stack-label" aria-hidden="true">
+            {stackLabel}
+        </span>
+        <ul class="stack-list" aria-label={`${role.title} tech stack`}>
+            {role.primaryTech.map((tech) => (
+                <li class="tech-pill primary-pill">{tech}</li>
+            ))}
+            {role.secondaryTech.map((tech) => (
+                <li class="tech-pill secondary-pill">[{tech}]</li>
+            ))}
+        </ul>
+    </footer>
+</article>
+
+<style>
+    .experience-card {
+        padding: clamp(20px, 3.5vw, 32px);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        border-radius: 0;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .role-identity {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .role-title {
+        font-size: var(--font-size-h3);
+        font-weight: var(--font-weight-semibold);
+        color: var(--colors-on-surface);
+        margin: 0;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+    }
+
+    .role-meta {
+        font-family: var(--font-mono-console);
+        font-size: var(--font-size-caption);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+    }
+
+    .company {
+        color: var(--colors-primary-light);
+        font-weight: var(--font-weight-medium);
+    }
+
+    .meta-dot {
+        opacity: 0.5;
+    }
+
+    .location {
+        color: var(--colors-on-surface-muted);
+    }
+
+    .role-timing {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 2px;
+        font-family: var(--font-mono-console);
+        font-size: var(--font-size-caption);
+        text-align: right;
+    }
+
+    .role-period {
+        color: var(--colors-on-surface-muted);
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .period-sep {
+        opacity: 0.6;
+    }
+
+    .role-duration {
+        color: var(--colors-on-surface-muted);
+        opacity: 0.75;
+        font-size: 0.75rem;
+    }
+
+    .role-summary {
+        font-size: var(--font-size-body-sm);
+        line-height: 1.6;
+        color: var(--colors-on-surface);
+        margin: 0;
+    }
+
+    .role-responsibilities {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-left: clamp(16px, 4vw, 44px);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .responsibility-item {
+        position: relative;
+        padding-left: 18px;
+        font-size: var(--font-size-body-sm);
+        line-height: 1.6;
+        color: var(--colors-on-surface-muted);
+    }
+
+    /* Default theme marker: crisp geometric square */
+    .responsibility-item::before {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 0.6em;
+        width: 5px;
+        height: 5px;
+        background-color: var(--colors-primary-light);
+        border-radius: 0;
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+
+    /* Bee theme marker: rotating pentagon ("panal" dot) calculated dynamically per item index */
+    :global(:root[data-theme="bee"]) .responsibility-item {
+        --item-index: sibling-index();
+
+        &::before {
+            left: 1px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--colors-primary);
+            clip-path: polygon(50% 0%, 100% 38%, 81% 100%, 19% 100%, 0% 38%);
+            border-radius: 0;
+            --pentagon-rot: calc(var(--item-index, 0) * 25deg);
+            transform: translateY(-50%) rotate(var(--pentagon-rot));
+        }
+    }
+
+    .role-stack-footer {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 8px;
+    }
+
+    .stack-label {
+        font-family: var(--font-mono-console);
+        font-size: 0.75rem;
+        font-weight: var(--font-weight-semibold);
+        color: var(--colors-on-surface-muted);
+        letter-spacing: 0.08em;
+    }
+
+    .stack-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .tech-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
+        font-family: var(--font-mono-console);
+        font-size: var(--font-size-caption);
+        line-height: 1.3;
+        white-space: nowrap;
+    }
+
+    /* Main / primary pills: fully driven by theme tokens */
+    .primary-pill {
+        background-color: var(--pill-main-bg);
+        border: 1px solid var(--pill-main-border);
+        color: var(--pill-main-color);
+        font-weight: var(--font-weight-medium);
+    }
+
+    /* Lower / secondary pills: fully driven by theme tokens */
+    .secondary-pill {
+        background-color: transparent;
+        border: 1px dashed var(--pill-secondary-border);
+        color: var(--pill-secondary-color);
+    }
+
+    @media (max-width: 640px) {
+        .role-timing {
+            align-items: flex-start;
+            text-align: left;
+        }
+        .role-responsibilities {
+            margin-left: 0;
+        }
+    }
+</style>
