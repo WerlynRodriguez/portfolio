@@ -3,4 +3,10 @@ export default {
   subtitle: 'Hello, World',
   p1: 'I build, integrate, and maintain modern software—specializing in <strong class="accent">Agentic AI workflows</strong> and <strong class="accent">real-time architectures</strong>. Currently, I focus on integrating LLMs into practical applications, managing the lifecycle from design to long-term maintenance.',
   p2: 'Looking ahead, I am targeting <strong class="accent">Inference Engineer</strong> specialization. I bring a deep curiosity to my work, with a strong focus on micro-optimizations and high-perfomance execution.',
+  'rubik.title': "LOCKED RUBIK'S RIG",
+  'rubik.hint': 'CLICK CUBE TO ATTEMPT ROTATION',
+  'rubik.aria':
+    "Locked Rubik's cube rig: click or press Space to attempt rotation",
+  'rubik.locked': 'locked',
+  'rubik.jammed': 'jammed',
 } as const;
