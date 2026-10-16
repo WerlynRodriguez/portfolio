@@ -1,0 +1,81 @@
+---
+interface Props {
+  primaryTech: string[];
+  secondaryTech?: string[];
+  ariaLabel: string;
+  stackLabel?: string;
+}
+
+const {
+  primaryTech,
+  secondaryTech = [],
+  ariaLabel,
+  stackLabel = 'STACK',
+} = Astro.props;
+---
+
+<footer class="pill-stack-container">
+  {stackLabel && <span class="stack-label" aria-hidden="true">{stackLabel}</span>}
+  <ul class="stack-list" aria-label={ariaLabel}>
+    {primaryTech.map((tech) => (
+      <li class="tech-pill primary-pill">{tech}</li>
+    ))}
+    {secondaryTech.map((tech) => (
+      <li class="tech-pill secondary-pill">[{tech}]</li>
+    ))}
+  </ul>
+</footer>
+
+<style>
+  .pill-stack-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 8px;
+  }
+
+  .stack-label {
+    font-family: var(--font-mono-console);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--colors-on-surface-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .stack-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tech-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-family: var(--font-mono-console);
+    font-size: var(--font-size-caption);
+    border-radius: 0;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  /* Primary pills: solid tokenized background and border */
+  .primary-pill {
+    background-color: var(--pill-main-bg);
+    border: 1px solid var(--pill-main-border);
+    color: var(--pill-main-color);
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* Secondary pills: dashed tokenized border and muted color */
+  .secondary-pill {
+    background-color: transparent;
+    border: 1px dashed var(--pill-secondary-border);
+    color: var(--pill-secondary-color);
+  }
+</style>

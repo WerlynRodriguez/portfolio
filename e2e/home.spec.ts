@@ -274,10 +274,10 @@ test.describe('Technical-Editorial Design System', () => {
     const subtitles = page.locator('.section-subtitle');
     expect(await subtitles.count()).toBeGreaterThanOrEqual(6);
 
-    // Check Bento Grid in Projects
-    await expect(page.locator('#projects .bento-grid')).toBeVisible();
-    const bentoCards = page.locator('#projects .bento-card');
-    expect(await bentoCards.count()).toBeGreaterThan(0);
+    // Check Projects Explorer in Projects
+    await expect(page.locator('#projects .projects-explorer')).toBeVisible();
+    const projectPanels = page.locator('#projects .project-panel');
+    expect(await projectPanels.count()).toBeGreaterThan(0);
 
     // Check micro-interaction buttons
     const cadButtons = page.locator('.btn-cad');

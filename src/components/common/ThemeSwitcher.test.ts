@@ -41,6 +41,6 @@ describe('ThemeSwitcher component (R4 / AC5)', () => {
     expect(result).toContain('Sistema');
     expect(result).toContain('Claro');
     expect(result).toContain('Oscuro');
-    expect(result).toContain('Abeja');
+    expect(result).toContain('Colmena');
   });
 });

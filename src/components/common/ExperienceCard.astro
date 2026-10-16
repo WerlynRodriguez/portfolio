@@ -1,4 +1,5 @@
 ---
+import PillStack from '@components/common/PillStack.astro';
 import type { Locale } from '@/i18n/utils';
 import { calculateDuration } from '@/lib/duration';
 import type { RoleItem } from '@/types/data';
@@ -62,19 +63,12 @@ const calculatedDuration = calculateDuration(
         ))}
     </ul>
 
-    <footer class="role-stack-footer">
-        <span class="stack-label" aria-hidden="true">
-            {stackLabel}
-        </span>
-        <ul class="stack-list" aria-label={`${role.title} tech stack`}>
-            {role.primaryTech.map((tech) => (
-                <li class="tech-pill primary-pill">{tech}</li>
-            ))}
-            {role.secondaryTech.map((tech) => (
-                <li class="tech-pill secondary-pill">[{tech}]</li>
-            ))}
-        </ul>
-    </footer>
+    <PillStack
+        primaryTech={role.primaryTech}
+        secondaryTech={role.secondaryTech}
+        ariaLabel={`${role.title} tech stack`}
+        stackLabel={stackLabel}
+    />
 </article>
 
 <style>
@@ -210,57 +204,6 @@ const calculatedDuration = calculateDuration(
             --pentagon-rot: calc(var(--item-index, 0) * 25deg);
             transform: translateY(-50%) rotate(var(--pentagon-rot));
         }
-    }
-
-    .role-stack-footer {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding-top: 8px;
-    }
-
-    .stack-label {
-        font-family: var(--font-mono-console);
-        font-size: 0.75rem;
-        font-weight: var(--font-weight-semibold);
-        color: var(--colors-on-surface-muted);
-        letter-spacing: 0.08em;
-    }
-
-    .stack-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: inline-flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .tech-pill {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 12px;
-        font-family: var(--font-mono-console);
-        font-size: var(--font-size-caption);
-        line-height: 1.3;
-        white-space: nowrap;
-    }
-
-    /* Main / primary pills: fully driven by theme tokens */
-    .primary-pill {
-        background-color: var(--pill-main-bg);
-        border: 1px solid var(--pill-main-border);
-        color: var(--pill-main-color);
-        font-weight: var(--font-weight-medium);
-    }
-
-    /* Lower / secondary pills: fully driven by theme tokens */
-    .secondary-pill {
-        background-color: transparent;
-        border: 1px dashed var(--pill-secondary-border);
-        color: var(--pill-secondary-color);
     }
 
     @media (max-width: 640px) {
