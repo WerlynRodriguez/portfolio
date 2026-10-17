@@ -40,6 +40,19 @@ function projectIso(x: number, y: number, z: number): [number, number] {
   ];
 }
 
+const VIEWBOX_W = 600;
+const VIEWBOX_H = 390;
+
+export function translateCss(delta: [number, number, number]): string {
+  const [dx, dy, dz] = delta;
+  const x = ((dx * K_C - dy * K_S) / VIEWBOX_W) * 100;
+  const y = ((dx * K_S_E + dy * K_C_E - dz * K_Z) / VIEWBOX_H) * 100;
+  return `translate(${x.toFixed(3)}%, ${y.toFixed(3)}%)`;
+}
+
+/**
+ * @deprecated use translateCss; emits SVG attribute format, not CSS transform.
+ */
 export function translateIso(delta: [number, number, number]): string {
   const [dx, dy, dz] = delta;
   const x = dx * K_C - dy * K_S;
@@ -103,10 +116,9 @@ export function initRubikCube(root: ParentNode = document): void {
     let last = 0;
 
     const draw = (state: RubikShakeState): void => {
-      if (topLayer)
-        topLayer.setAttribute('transform', translateIso(state.topOffset));
+      if (topLayer) topLayer.style.transform = translateCss(state.topOffset);
       if (lowerLayer)
-        lowerLayer.setAttribute('transform', translateIso(state.lowOffset));
+        lowerLayer.style.transform = translateCss(state.lowOffset);
 
       if (needle) {
         const turn = 0.05 + (state.torque / 6.0) * 0.38;
@@ -142,6 +154,7 @@ export function initRubikCube(root: ParentNode = document): void {
         }
         shakeTime = -1;
         frame = 0;
+        delete stage.dataset.animating;
         return;
       }
       draw(ZERO_STATE);
@@ -150,12 +163,14 @@ export function initRubikCube(root: ParentNode = document): void {
 
     const triggerShake = (): void => {
       if (reducedMotion.matches) {
+        delete stage.dataset.animating;
         draw(ZERO_STATE);
         return;
       }
       shakeTime = 0;
       if (!frame) {
         last = 0;
+        stage.dataset.animating = '';
         frame = requestAnimationFrame(tick);
       }
     };

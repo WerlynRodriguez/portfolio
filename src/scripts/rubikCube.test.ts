@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
-import { evaluateRubikShake, initRubikCube, translateIso } from './rubikCube';
+import {
+  evaluateRubikShake,
+  initRubikCube,
+  translateCss,
+  translateIso,
+} from './rubikCube';
 
 describe('rubikCube', () => {
   describe('evaluateRubikShake', () => {
@@ -28,6 +33,14 @@ describe('rubikCube', () => {
     });
   });
 
+  describe('translateCss', () => {
+    it('projects 3D isometric offset vector into percentage-based CSS translate', () => {
+      expect(translateCss([0, 0, 0])).toBe('translate(0.000%, 0.000%)');
+      const shifted = translateCss([2, -1, 0.5]);
+      expect(shifted).toMatch(/^translate\(-?\d+\.\d{3}%, -?\d+\.\d{3}%\)$/);
+    });
+  });
+
   describe('translateIso', () => {
     it('projects 3D isometric offset vector into 2D SVG translate string', () => {
       const transform = translateIso([0, 0, 0]);
@@ -41,8 +54,14 @@ describe('rubikCube', () => {
   describe('initRubikCube', () => {
     it('initializes stage state and handles interaction when reduced motion is enabled', () => {
       const listeners: Record<string, ((event: unknown) => void)[]> = {};
-      const topLayer = { setAttribute: vi.fn() };
-      const lowerLayer = { setAttribute: vi.fn() };
+      const topLayer = {
+        style: { transform: '' },
+        setAttribute: vi.fn(),
+      };
+      const lowerLayer = {
+        style: { transform: '' },
+        setAttribute: vi.fn(),
+      };
       const needle = { setAttribute: vi.fn() };
       const readout = {
         textContent: '',
@@ -55,6 +74,7 @@ describe('rubikCube', () => {
 
       const stageAttrs: Record<string, string> = {};
       const stage = {
+        dataset: {} as Record<string, string>,
         getAttribute: vi.fn((key: string) => stageAttrs[key] ?? null),
         setAttribute: vi.fn((key: string, val: string) => {
           stageAttrs[key] = val;
@@ -94,9 +114,11 @@ describe('rubikCube', () => {
 
       expect(stage.setAttribute).toHaveBeenCalledWith('data-state', 'locked');
       expect(readout.textContent).toBe('locked · 0.00 N·m');
+      expect(stage.dataset.animating).toBeUndefined();
 
       listeners.click?.[0]?.({});
       expect(readout.textContent).toBe('locked · 0.00 N·m');
+      expect(stage.dataset.animating).toBeUndefined();
 
       const preventDefault = vi.fn();
       listeners.keydown?.[0]?.({ key: ' ', preventDefault });
@@ -106,10 +128,16 @@ describe('rubikCube', () => {
       vi.unstubAllGlobals();
     });
 
-    it('triggers shudder animation and updates data-state when reduced motion is false', () => {
+    it('triggers shudder animation and updates data-animating and data-state when reduced motion is false', () => {
       const listeners: Record<string, ((event: unknown) => void)[]> = {};
-      const topLayer = { setAttribute: vi.fn() };
-      const lowerLayer = { setAttribute: vi.fn() };
+      const topLayer = {
+        style: { transform: '' },
+        setAttribute: vi.fn(),
+      };
+      const lowerLayer = {
+        style: { transform: '' },
+        setAttribute: vi.fn(),
+      };
       const needle = { setAttribute: vi.fn() };
       const readout = {
         textContent: '',
@@ -122,6 +150,7 @@ describe('rubikCube', () => {
 
       const stageAttrs: Record<string, string> = {};
       const stage = {
+        dataset: {} as Record<string, string>,
         getAttribute: vi.fn((key: string) => stageAttrs[key] ?? null),
         setAttribute: vi.fn((key: string, val: string) => {
           stageAttrs[key] = val;
@@ -172,6 +201,7 @@ describe('rubikCube', () => {
       // Click triggers shake
       listeners.click?.[0]?.({});
       expect(typeof rafCallback).toBe('function');
+      expect(stage.dataset.animating).toBe('');
 
       // First tick at 30ms (peak shudder)
       if (rafCallback) {
@@ -179,6 +209,15 @@ describe('rubikCube', () => {
       }
       expect(stageAttrs['data-state']).toBe('jammed');
       expect(readout.textContent).toContain('jammed ·');
+      expect(topLayer.style.transform).toMatch(/^translate\(-?\d+\.\d{3}%/);
+
+      // Advance animation frames until shakeTime completes (> 0.52s)
+      for (let t = 1; t <= 25; t++) {
+        if (rafCallback) {
+          (rafCallback as (now: number) => void)(t * 30);
+        }
+      }
+      expect(stage.dataset.animating).toBeUndefined();
 
       vi.unstubAllGlobals();
     });
