@@ -30,7 +30,8 @@ const ZERO_STATE: RubikShakeState = {
   torque: 0,
 };
 
-const f2 = (n: number): string => n > -1e-6 && n < 1e-6 ? "0.00" : n.toFixed(2);
+const f2 = (n: number): string =>
+  n > -1e-6 && n < 1e-6 ? '0.00' : n.toFixed(2);
 
 function projectIso(x: number, y: number, z: number): [number, number] {
   return [
@@ -40,33 +41,26 @@ function projectIso(x: number, y: number, z: number): [number, number] {
 }
 
 export function translateIso(delta: [number, number, number]): string {
-  const [x0, y0] = projectIso(0, 0, 0);
-  const [x1, y1] = projectIso(delta[0], delta[1], delta[2]);
-  return `translate(${f2(x1 - x0)} ${f2(y1 - y0)})`;
+  const [dx, dy, dz] = delta;
+  const x = dx * K_C - dy * K_S;
+  const y = dx * K_S_E + dy * K_C_E - dz * K_Z;
+  return `translate(${f2(x)} ${f2(y)})`;
 }
 
 export function needlePathAt(turn: number): string {
   const angle = turn * Math.PI * 2;
-  const [x0, y0] = projectIso(
-    DIAL_X - Math.sin(angle) * 3.2,
-    DIAL_Y + Math.cos(angle) * 3.2,
-    Z,
-  );
-  const [x1, y1] = projectIso(
-    DIAL_X + Math.sin(angle) * R_TIP,
-    DIAL_Y - Math.cos(angle) * R_TIP,
-    Z,
-  );
+  const s = Math.sin(angle);
+  const c = Math.cos(angle);
+  const [x0, y0] = projectIso(DIAL_X - s * 3.2, DIAL_Y + c * 3.2, Z);
+  const [x1, y1] = projectIso(DIAL_X + s * R_TIP, DIAL_Y - c * R_TIP, Z);
   return `M${f2(x0)},${f2(y0)}L${f2(x1)},${f2(y1)}`;
 }
 
 export function evaluateRubikShake(t: number): RubikShakeState {
   if (t < 0 || t > 0.52) {
-    return { topOffset: [0, 0, 0], lowOffset: [0, 0, 0], torque: 0 };
+    return ZERO_STATE;
   }
-  const ramp = t < 0.07
-    ? Math.sin((t / 0.07) * (Math.PI / 2))
-    : 1;
+  const ramp = t < 0.07 ? Math.sin((t / 0.07) * (Math.PI / 2)) : 1;
   const env = ramp * Math.exp(-t * 6.8);
   const wave = Math.sin(t * 72) * 0.65 + Math.sin(t * 125) * 0.35;
   const lunge = Math.exp(-t * 9) * 1.4;
@@ -109,8 +103,10 @@ export function initRubikCube(root: ParentNode = document): void {
     let last = 0;
 
     const draw = (state: RubikShakeState): void => {
-      if (topLayer) topLayer.setAttribute('transform', translateIso(state.topOffset));
-      if (lowerLayer) lowerLayer.setAttribute('transform', translateIso(state.lowOffset));
+      if (topLayer)
+        topLayer.setAttribute('transform', translateIso(state.topOffset));
+      if (lowerLayer)
+        lowerLayer.setAttribute('transform', translateIso(state.lowOffset));
 
       if (needle) {
         const turn = 0.05 + (state.torque / 6.0) * 0.38;
