@@ -1,5 +1,6 @@
 import type {
   AcademicItem,
+  CertificateItem,
   ContactData,
   RoleItem,
   SkillsData,
@@ -94,10 +95,61 @@ export const skillsData: SkillsData = [
 
 export const academicItems: AcademicItem[] = [
   {
-    title: 'Grado en Ingeniería Informática',
-    period: { start: '2020', end: '2024' },
+    title: 'Campus de Programación',
+    institution: '42 Madrid',
+    location: 'España',
+    period: {
+      start: '2024-11',
+      startLabel: 'Noviembre 2024',
+      end: '2025-12',
+      endLabel: 'Diciembre 2025',
+    },
     description:
-      'Especialización en Ingeniería de Software y Sistemas Distribuidos.',
+      'Formación intensiva en C y entornos Unix/Linux: gestión de procesos, forks, threads y memoria.',
+  },
+  {
+    title: 'Curso de Inteligencia Artificial con Python',
+    institution: 'Microsoft Reactor',
+    location: 'Remoto',
+    period: {
+      start: '2025-09',
+      startLabel: 'Septiembre 2025',
+      end: '2025-10',
+      endLabel: 'Octubre 2025',
+    },
+    description:
+      'Construcción de aplicaciones de IA generativa con LLMs, visión por computadora, embeddings vectoriales y RAG.',
+  },
+  {
+    title: 'Ingeniería en Computación',
+    institution: 'Universidad Nacional de Ingeniería',
+    location: 'Nicaragua',
+    period: {
+      start: '2019-01',
+      startLabel: 'Enero 2019',
+      end: '2023-12',
+      endLabel: 'Diciembre 2023',
+    },
+    description:
+      'Estructuras de datos, algoritmos, sistemas operativos, redes y arquitectura de software. GPA: 8.22/10.',
+  },
+];
+
+export const certificateItems: CertificateItem[] = [
+  {
+    name: 'React',
+    issuer: 'HackerRank',
+    url: 'https://www.hackerrank.com/certificates/a287ed549a63',
+  },
+  {
+    name: 'Google AI',
+    issuer: 'Alura',
+    url: 'https://credsverse.com/credentials/15c1e0d2-a762-43d4-a825-c4e39888439d?preview=1',
+  },
+  {
+    name: 'Claude Code',
+    issuer: 'Anthropic',
+    url: 'https://verify.skilljar.com/c/xtxymg2vjjdr',
   },
 ];
 

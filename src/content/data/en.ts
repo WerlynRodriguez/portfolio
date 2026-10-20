@@ -1,5 +1,6 @@
 import type {
   AcademicItem,
+  CertificateItem,
   ContactData,
   RoleItem,
   SkillsData,
@@ -90,10 +91,61 @@ export const skillsData: SkillsData = [
 
 export const academicItems: AcademicItem[] = [
   {
-    title: 'B.S. in Computer Science',
-    period: { start: '2020', end: '2024' },
+    title: 'Programming Campus',
+    institution: '42 Madrid',
+    location: 'Spain',
+    period: {
+      start: '2024-11',
+      startLabel: 'November 2024',
+      end: '2025-12',
+      endLabel: 'December 2025',
+    },
     description:
-      'Specialization in Software Engineering and Distributed Systems.',
+      'Intensive training in C and Unix/Linux environments: process management, forks, threads, and memory.',
+  },
+  {
+    title: 'AI with Python Course',
+    institution: 'Microsoft Reactor',
+    location: 'Remote',
+    period: {
+      start: '2025-09',
+      startLabel: 'September 2025',
+      end: '2025-10',
+      endLabel: 'October 2025',
+    },
+    description:
+      'Building generative AI applications with LLMs, computer vision, vector embeddings, and RAG.',
+  },
+  {
+    title: 'Computer Engineering',
+    institution: 'Universidad Nacional de Ingeniería',
+    location: 'Nicaragua',
+    period: {
+      start: '2019-01',
+      startLabel: 'January 2019',
+      end: '2023-12',
+      endLabel: 'December 2023',
+    },
+    description:
+      'Data structures, algorithms, operating systems, networking, and software architecture. GPA: 8.22/10.',
+  },
+];
+
+export const certificateItems: CertificateItem[] = [
+  {
+    name: 'React',
+    issuer: 'HackerRank',
+    url: 'https://www.hackerrank.com/certificates/a287ed549a63',
+  },
+  {
+    name: 'Google AI',
+    issuer: 'Alura',
+    url: 'https://credsverse.com/credentials/15c1e0d2-a762-43d4-a825-c4e39888439d?preview=1',
+  },
+  {
+    name: 'Claude Code',
+    issuer: 'Anthropic',
+    url: 'https://verify.skilljar.com/c/xtxymg2vjjdr',
   },
 ];
 

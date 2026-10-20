@@ -17,11 +17,21 @@ export interface RoleItem {
 
 export interface AcademicItem {
   title: string;
+  institution: string;
+  location: string;
   period: {
     start: string;
+    startLabel: string;
     end: string;
+    endLabel: string;
   };
   description: string;
+}
+
+export interface CertificateItem {
+  name: string;
+  issuer: string;
+  url: string;
 }
 
 export interface SkillItem {

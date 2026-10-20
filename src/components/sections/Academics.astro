@@ -1,8 +1,16 @@
 ---
+import AcademicCard from '@components/common/AcademicCard.astro';
 import SectionHeader from '@components/common/SectionHeader.astro';
-import { academicItems as enAcademics } from '@content/data/en';
-import { academicItems as esAcademics } from '@content/data/es';
+import {
+  academicItems as enAcademics,
+  certificateItems as enCertificates,
+} from '@content/data/en';
+import {
+  academicItems as esAcademics,
+  certificateItems as esCertificates,
+} from '@content/data/es';
 import { type Locale, useTranslations } from '@i18n/utils';
+import { Icon } from 'astro-icon/components';
 
 interface Props {
   lang: Locale;
@@ -11,77 +19,210 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang, 'academics');
 const items = lang === 'es' ? esAcademics : enAcademics;
+const certificates = lang === 'es' ? esCertificates : enCertificates;
 ---
 
 <section
-    id="academics"
-    class="academics-section"
-    aria-labelledby="academics-heading"
+  id="academics"
+  class="academics-section"
+  aria-labelledby="academics-heading"
 >
-    <SectionHeader
-        prefix="0x05"
-        title={t("heading")}
-        subtitle={t("subtitle")}
-        id="academics-heading"
-    />
-    <ul class="academics-list">
-        {items.map((item) => (
-            <li class="academics-item">
-                <article class="academics-card cad-frame">
-                    <header class="academics-header separator">
-                        <h3 class="academics-title">{item.title}</h3>
-                        <p class="academics-period tag-cad">
-                            <time datetime={item.period.start}>
-                                {item.period.start}
-                            </time>{" "}
-                            —{" "}
-                            <time datetime={item.period.end}>
-                                {item.period.end}
-                            </time>
-                        </p>
-                    </header>
-                    <p class="academics-desc">{item.description}</p>
-                </article>
-            </li>
-        ))}
-    </ul>
+  <SectionHeader
+    prefix="0x05"
+    title={t('heading')}
+    subtitle={t('subtitle')}
+    id="academics-heading"
+  />
+
+  <ul class="academics-list">
+    {items.map((item) => (
+      <li class="academics-list-item">
+        <AcademicCard item={item} />
+      </li>
+    ))}
+  </ul>
+
+  <div class="certificates-container">
+    <h4 class="certificates-heading">
+      <span class="cert-heading-icon-wrap" aria-hidden="true">
+        <Icon name="award" size={16} class="cert-heading-icon" />
+      </span>
+      <span>{t('certificatesHeading')}</span>
+    </h4>
+    <div class="certificates-grid">
+      {certificates.map((cert) => (
+        <a
+          href={cert.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="certificate-card cad-frame"
+          aria-label={`${cert.name} ${t('atIssuer')} ${cert.issuer} (${t('viewCertificate')})`}
+        >
+          <div class="cert-card-left">
+            <div class="cert-icon-frame" aria-hidden="true">
+              <Icon name="award" size={20} class="cert-icon" />
+            </div>
+            <div class="cert-info">
+              <span class="cert-name">{cert.name}</span>
+              <span class="cert-issuer">
+                {t('atIssuer')} {cert.issuer}
+              </span>
+            </div>
+          </div>
+          <span class="cert-arrow" aria-hidden="true">
+            ↗
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
 </section>
 
 <style>
-    .academics-section {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+  .academics-section {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .academics-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .academics-list-item {
+    list-style: none;
+  }
+
+  .certificates-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 8px;
+  }
+
+  .certificates-heading {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono-console);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    color: var(--colors-on-surface-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .cert-heading-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cert-heading-icon {
+    color: var(--colors-primary);
+  }
+
+  .certificates-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  @media (min-width: 640px) {
+    .certificates-grid {
+      grid-template-columns: repeat(3, 1fr);
     }
-    .academics-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-    .academics-card {
-        padding: clamp(20px, 3vw, 28px);
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-    }
-    .academics-header {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding-bottom: 10px;
-    }
-    .academics-title {
-        font-size: var(--font-size-h3);
-        margin: 0;
-    }
-    .academics-desc {
-        color: var(--colors-on-surface-muted);
-        line-height: 1.6;
-        margin: 0;
-    }
+  }
+
+  .certificate-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    background-color: var(--colors-surface);
+    text-decoration: none;
+    transition:
+      background-color var(--transition-micro),
+      outline var(--transition-micro),
+      outline-offset var(--transition-micro);
+  }
+
+  .cert-card-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .cert-icon-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    background-color: var(--colors-surface-dim);
+    border: 1px solid var(--colors-outline-subtle);
+    color: var(--colors-primary);
+    transition:
+      border-color var(--transition-micro),
+      color var(--transition-micro);
+  }
+
+  .cert-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .certificate-card:hover {
+    outline: 2px dashed var(--colors-punctual);
+    outline-offset: 2px;
+    background-color: var(--colors-surface-elevated);
+  }
+
+  .certificate-card:hover .cert-icon-frame {
+    border-color: var(--colors-punctual);
+    color: var(--colors-punctual);
+  }
+
+  .certificate-card:hover .cert-arrow {
+    transform: translate(2px, -2px);
+    color: var(--colors-punctual);
+  }
+
+  .cert-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .cert-name {
+    font-family: var(--font-mono-display);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--colors-on-background);
+  }
+
+  .cert-issuer {
+    font-family: var(--font-mono-console);
+    font-size: var(--font-size-caption);
+    color: var(--colors-on-surface-muted);
+  }
+
+  .cert-arrow {
+    font-family: var(--font-mono-console);
+    font-size: 1.1rem;
+    color: var(--colors-primary-light);
+    transition:
+      transform var(--transition-micro),
+      color var(--transition-micro);
+  }
 </style>

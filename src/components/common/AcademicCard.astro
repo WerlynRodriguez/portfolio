@@ -1,0 +1,132 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { AcademicItem } from '@/types/data';
+
+interface Props {
+  item: AcademicItem;
+}
+
+const { item } = Astro.props;
+---
+
+<article class="academic-card cad-frame">
+  <div class="academic-icon-col" aria-hidden="true">
+    <div class="icon-frame">
+      <Icon name="school" size={24} class="academic-icon" />
+    </div>
+  </div>
+  <div class="academic-content-col">
+    <h3 class="academic-title">{item.title}</h3>
+    <p class="academic-desc">{item.description}</p>
+    <p class="academic-meta">
+      <span class="institution">{item.institution}, {item.location}</span>
+      <span class="meta-sep" aria-hidden="true">|</span>
+      <span class="date-range">
+        <time datetime={item.period.start}>{item.period.startLabel}</time>
+        <span class="date-sep" aria-hidden="true"> — </span>
+        <time datetime={item.period.end}>{item.period.endLabel}</time>
+      </span>
+    </p>
+  </div>
+</article>
+
+<style>
+  .academic-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: clamp(18px, 2.8vw, 24px);
+    background-color: var(--colors-surface);
+  }
+
+  .academic-icon-col {
+    flex-shrink: 0;
+  }
+
+  .icon-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background-color: var(--colors-surface-dim);
+    border: 1px solid var(--colors-outline-subtle);
+    color: var(--colors-primary);
+  }
+
+  .academic-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .academic-content-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .academic-title {
+    font-family: var(--font-mono-display);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    color: var(--colors-on-background);
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .academic-desc {
+    font-family: var(--font-mono-body);
+    font-size: var(--font-size-body-sm);
+    color: var(--colors-on-surface-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .academic-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono-console);
+    font-size: var(--font-size-caption);
+    color: var(--colors-on-surface-muted);
+    margin: 0;
+    padding-top: 4px;
+  }
+
+  .institution {
+    color: var(--colors-primary-light);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .meta-sep {
+    opacity: 0.5;
+  }
+
+  .date-range {
+    white-space: nowrap;
+  }
+
+  .date-sep {
+    opacity: 0.6;
+  }
+
+  @media (max-width: 540px) {
+    .academic-card {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .academic-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .meta-sep {
+      display: none;
+    }
+  }
+</style>
