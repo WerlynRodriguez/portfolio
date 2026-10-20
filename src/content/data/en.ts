@@ -49,20 +49,44 @@ export const experienceRoles: RoleItem[] = [
   },
 ];
 
-export const skillsData: SkillsData = {
-  frontendSkills: [
-    'Astro',
-    'TypeScript',
-    'Semantic HTML5',
-    'Modern CSS & Container Queries',
-  ],
-  backendSkills: [
-    'Node.js',
-    'REST & GraphQL APIs',
-    'Database Architecture',
-    'System Design',
-  ],
-};
+export const skillsData: SkillsData = [
+  {
+    title: 'Agentic AI',
+    description:
+      'I practically integrate large language models (LLMs) into real product workflows. I design and orchestrate autonomous agents leveraging modern harnesses like Claude Code or Antigravity.',
+    primaryTech: ['LLM Integration', 'Agent Orchestration'],
+    secondaryTech: ['RAG & Vector Databases', 'Tool Calling', 'AI Frameworks'],
+  },
+  {
+    title: 'Frontend',
+    description:
+      'I build deterministic, fast interfaces designed for people. I focus on developing modular components and clean design systems that load fast.',
+    primaryTech: ['TypeScript', 'React', 'Astro'],
+    secondaryTech: [
+      'Modern CSS',
+      'Testing (Vitest & Playwright)',
+      'Mobile Development',
+    ],
+  },
+  {
+    title: 'Backend',
+    description:
+      'I design and maintain the quiet logic powering daily business operations. I build APIs and data architectures focused on transactional integrity, seamless real-time sync, and high concurrency.',
+    primaryTech: ['.NET (C#)', 'RESTful-APIs', 'SQL Server'],
+    secondaryTech: ['Azure Cloud', 'SQLite', 'PostgreSQL'],
+  },
+  {
+    title: 'Systems',
+    description:
+      'I work at a low level managing memory, processes, and Unix/Linux environments, ensuring services run on stable, secure foundations that maximize available resources.',
+    primaryTech: ['C', 'Linux', 'Bash & Shell Scripts'],
+    secondaryTech: [
+      'Concurrency and Threads',
+      'Networks (TCP/IP)',
+      'Server Administration',
+    ],
+  },
+];
 
 export const academicItems: AcademicItem[] = [
   {

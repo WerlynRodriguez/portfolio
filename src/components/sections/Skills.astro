@@ -1,5 +1,6 @@
 ---
 import SectionHeader from '@components/common/SectionHeader.astro';
+import SkillCard from '@components/common/SkillCard.astro';
 import { skillsData as enSkills } from '@content/data/en';
 import { skillsData as esSkills } from '@content/data/es';
 import { type Locale, useTranslations } from '@i18n/utils';
@@ -20,40 +21,10 @@ const skills = lang === 'es' ? esSkills : enSkills;
         subtitle={t("subtitle")}
         id="skills-heading"
     />
-    <div class="skills-diagram">
-        <section
-            class="skills-column cad-frame"
-            aria-labelledby="skills-frontend-heading"
-        >
-            <h3
-                id="skills-frontend-heading"
-                class="skills-category-title separator"
-            >
-                {t("frontendHeading")}
-            </h3>
-            <ul class="skills-list">
-                {skills.frontendSkills.map((skill) => (
-                    <li>
-                        <span class="tag-cad">{skill}</span>
-                    </li>
-                ))}
-            </ul>
-        </section>
-        <section
-            class="skills-column cad-frame bento-surface-elevated"
-            aria-labelledby="skills-backend-heading"
-        >
-            <h3 id="skills-backend-heading" class="skills-category-title">
-                {t("backendHeading")}
-            </h3>
-            <ul class="skills-list">
-                {skills.backendSkills.map((skill) => (
-                    <li>
-                        <span class="tag-cad">{skill}</span>
-                    </li>
-                ))}
-            </ul>
-        </section>
+    <div class="skills-grid">
+        {skills.map((skill) => (
+            <SkillCard skill={skill} />
+        ))}
     </div>
 </section>
 
@@ -61,35 +32,18 @@ const skills = lang === 'es' ? esSkills : enSkills;
     .skills-section {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 24px;
     }
-    .skills-diagram {
+
+    .skills-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 24px;
     }
+
     @media (min-width: 768px) {
-        .skills-diagram {
+        .skills-grid {
             grid-template-columns: repeat(2, 1fr);
         }
-    }
-    .skills-column {
-        padding: clamp(20px, 3vw, 28px);
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-    .skills-category-title {
-        font-size: var(--font-size-h3);
-        padding-bottom: 8px;
-        margin: 0;
-    }
-    .skills-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
     }
 </style>

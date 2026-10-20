@@ -49,20 +49,48 @@ export const experienceRoles: RoleItem[] = [
   },
 ];
 
-export const skillsData: SkillsData = {
-  frontendSkills: [
-    'Astro',
-    'TypeScript',
-    'HTML5 Semántico',
-    'CSS Moderno y Container Queries',
-  ],
-  backendSkills: [
-    'Node.js',
-    'APIs REST y GraphQL',
-    'Arquitectura de Bases de Datos',
-    'Diseño de Sistemas',
-  ],
-};
+export const skillsData: SkillsData = [
+  {
+    title: 'Agentic IA',
+    description:
+      'Puedo integrar de manera práctica modelos de lenguaje (LLM) en flujos de producto reales. Diseño y orquesto agentes autónomos apoyándome en arneses modernos como Claude Code o Antigravity.',
+    primaryTech: ['Integración de LLMs', 'Orquestación de Agentes'],
+    secondaryTech: [
+      'RAG & Bases Vectoriales',
+      'Tool Calling',
+      'Frameworks de IA',
+    ],
+  },
+  {
+    title: 'Frontend',
+    description:
+      'Construyo interfaces deterministas, rápidas y pensadas para las personas. Me enfoco en desarrollar componentes modulares y sistemas de diseño limpios que cargan rápido.',
+    primaryTech: ['TypeScript', 'React', 'Astro'],
+    secondaryTech: [
+      'CSS Moderno',
+      'Testing (Vitest & Playwright)',
+      'Desarrollo Móvil',
+    ],
+  },
+  {
+    title: 'Backend',
+    description:
+      'Soy capaz de diseñar y mantener la lógica silenciosa que sostiene la operación diaria del negocio. Desarrollo APIs y arquitecturas de datos enfocadas en integridad transaccional, sincronización fluida en tiempo real y alta concurrencia.',
+    primaryTech: ['.NET (C#)', 'APIs RESTful', 'SQL Server'],
+    secondaryTech: ['Azure Cloud', 'SQLite', 'PostgreSQL'],
+  },
+  {
+    title: 'Sistemas',
+    description:
+      'Puedo trabajar a bajo nivel gestionando memoria, procesos y entornos Unix/Linux, garantizando que los servicios se ejecuten sobre bases estables, seguras y aprovechando al máximo los recursos disponibles.',
+    primaryTech: ['C', 'Linux', 'Bash & Shell Scripts'],
+    secondaryTech: [
+      'Concurrencia e Hilos',
+      'Redes (TCP/IP)',
+      'Administración de Servidores',
+    ],
+  },
+];
 
 export const academicItems: AcademicItem[] = [
   {

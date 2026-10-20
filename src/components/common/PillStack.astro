@@ -4,6 +4,7 @@ interface Props {
   secondaryTech?: string[];
   ariaLabel: string;
   stackLabel?: string;
+  layout?: 'flow' | 'masonry';
 }
 
 const {
@@ -11,19 +12,39 @@ const {
   secondaryTech = [],
   ariaLabel,
   stackLabel = 'STACK',
+  layout = 'flow',
 } = Astro.props;
 ---
 
-<footer class="pill-stack-container">
+<footer class:list={['pill-stack-container', `layout-${layout}`]}>
   {stackLabel && <span class="stack-label" aria-hidden="true">{stackLabel}</span>}
-  <ul class="stack-list" aria-label={ariaLabel}>
-    {primaryTech.map((tech) => (
-      <li class="tech-pill primary-pill">{tech}</li>
-    ))}
-    {secondaryTech.map((tech) => (
-      <li class="tech-pill secondary-pill">[{tech}]</li>
-    ))}
-  </ul>
+  {layout === 'masonry' ? (
+    <div class="stack-masonry" aria-label={ariaLabel}>
+      {primaryTech.length > 0 && (
+        <ul class="primary-stack" aria-label="Core stack">
+          {primaryTech.map((tech) => (
+            <li class="tech-pill primary-pill">{tech}</li>
+          ))}
+        </ul>
+      )}
+      {secondaryTech.length > 0 && (
+        <ul class="secondary-stack" aria-label="Supporting stack">
+          {secondaryTech.map((tech) => (
+            <li class="tech-pill secondary-pill">[{tech}]</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  ) : (
+    <ul class="stack-list" aria-label={ariaLabel}>
+      {primaryTech.map((tech) => (
+        <li class="tech-pill primary-pill">{tech}</li>
+      ))}
+      {secondaryTech.map((tech) => (
+        <li class="tech-pill secondary-pill">[{tech}]</li>
+      ))}
+    </ul>
+  )}
 </footer>
 
 <style>
@@ -77,5 +98,76 @@ const {
     background-color: transparent;
     border: 1px dashed var(--pill-secondary-border);
     color: var(--pill-secondary-color);
+  }
+
+  /* ==========================================================================
+     Pinterest Masonry Layout (Two-Tier)
+     ========================================================================== */
+  .pill-stack-container.layout-masonry {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+    margin-top: auto;
+  }
+
+  .layout-masonry .stack-label {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .layout-masonry .stack-masonry {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  /* Primary tier: prominent horizontal badges */
+  .layout-masonry .primary-stack {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .layout-masonry .primary-stack .tech-pill {
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
+    padding: 5px 10px;
+    white-space: normal;
+  }
+
+  /* Secondary tier: Pinterest multi-column layout */
+  .layout-masonry .secondary-stack {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    columns: 2;
+    column-gap: 8px;
+    width: 100%;
+  }
+
+  .layout-masonry .secondary-stack .tech-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    break-inside: avoid;
+    margin-bottom: 8px;
+    width: 100%;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    white-space: normal;
+  }
+
+  @media (max-width: 360px) {
+    .layout-masonry .secondary-stack {
+      columns: 1;
+    }
   }
 </style>

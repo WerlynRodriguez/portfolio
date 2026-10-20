@@ -24,10 +24,14 @@ export interface AcademicItem {
   description: string;
 }
 
-export interface SkillsData {
-  frontendSkills: string[];
-  backendSkills: string[];
+export interface SkillItem {
+  title: string;
+  description: string;
+  primaryTech: string[];
+  secondaryTech: string[];
 }
+
+export type SkillsData = SkillItem[];
 
 export interface SocialLink {
   name: string;

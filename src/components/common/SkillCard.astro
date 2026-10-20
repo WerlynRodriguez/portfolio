@@ -1,0 +1,53 @@
+---
+import PillStack from '@components/common/PillStack.astro';
+import type { SkillItem } from '@/types/data';
+
+interface Props {
+  skill: SkillItem;
+  stackLabel?: string;
+}
+
+const { skill, stackLabel = 'STACK' } = Astro.props;
+---
+
+<article class="skill-card cad-frame">
+  <h3 class="skill-title">{skill.title}</h3>
+  <p class="skill-description">{skill.description}</p>
+  <PillStack
+    primaryTech={skill.primaryTech}
+    secondaryTech={skill.secondaryTech}
+    ariaLabel={`${skill.title} stack`}
+    stackLabel={stackLabel}
+    layout="masonry"
+  />
+</article>
+
+<style>
+  .skill-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    padding: clamp(20px, 3vw, 28px);
+    background-color: var(--colors-surface);
+    border: 1px solid var(--colors-outline-subtle);
+  }
+
+  .skill-title {
+    font-family: var(--font-mono-display);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    color: var(--colors-on-background);
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .skill-description {
+    font-family: var(--font-mono-body);
+    font-size: var(--font-size-body-sm);
+    color: var(--colors-on-surface-muted);
+    line-height: 1.6;
+    margin: 0;
+    flex-grow: 1;
+  }
+</style>
