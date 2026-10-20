@@ -1,23 +1,23 @@
 ---
-import { type Locale, useTranslations } from "@i18n/utils";
-import { Icon } from "astro-icon/components";
-import heroPortrait from "@/assets/hero-portrait.webp";
+import { type Locale, useTranslations } from '@i18n/utils';
+import { Icon } from 'astro-icon/components';
+import heroPortrait from '@/assets/hero-portrait.webp';
 
 interface Props {
-    lang: Locale;
+  lang: Locale;
 }
 
 const HERO_INFO_LABELS = Object.freeze([
-    "role",
-    "stack",
-    "knowledge",
-    "timezone",
+  'role',
+  'stack',
+  'knowledge',
+  'timezone',
 ] as const);
 
 const { lang } = Astro.props;
-const t = useTranslations(lang, "hero");
+const t = useTranslations(lang, 'hero');
 
-const lastNameChars = t("lastName").split("");
+const lastNameChars = t('lastName').split('');
 ---
 
 <section

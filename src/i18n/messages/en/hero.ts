@@ -16,5 +16,5 @@ export default {
   'metric.coffee.label': 'Coffe Driven',
   'actions.aria': 'Quick actions',
   'cta.exp': 'My Path',
-  'cta.contact': 'Let\'s Talk',
+  'cta.contact': "Let's Talk",
 } as const;
