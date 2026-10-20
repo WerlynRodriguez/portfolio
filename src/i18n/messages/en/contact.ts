@@ -6,4 +6,9 @@ export default {
   mailtoLabel: 'Send Email',
   mailtoAria: 'Send email to rdwerlynjose.16@gmail.com',
   socialsAria: 'Social links',
+  emailHeading: 'Direct Email',
+  socialsHeading: 'Social Networks',
+  resumeHeading: 'Resume',
+  resumeViewAria: 'View resume in new tab (Curriculum.pdf)',
+  resumeDownloadAria: 'Download resume (Curriculum.pdf)',
 } as const;

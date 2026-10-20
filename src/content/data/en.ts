@@ -152,8 +152,28 @@ export const certificateItems: CertificateItem[] = [
 export const contactData: ContactData = {
   email: 'rdwerlynjose.16@gmail.com',
   socials: [
-    { name: 'GitHub', url: 'https://github.com/', icon: 'github' },
-    { name: 'LinkedIn', url: 'https://linkedin.com', icon: 'linkedin' },
-    { name: 'WhatsApp', url: 'https://wa.me/', icon: 'whatsapp' },
+    {
+      name: 'GitHub',
+      url: 'https://github.com/WerlynRodriguez',
+      handle: '@WerlynRodriguez',
+      icon: 'github',
+    },
+    {
+      name: 'LinkedIn',
+      url: 'https://www.linkedin.com/in/werlyn-rodriguez-760007183/',
+      handle: '/in/werlyn-rodriguez',
+      icon: 'linkedin',
+    },
+    {
+      name: 'WhatsApp',
+      url: 'https://wa.me/34641238034',
+      handle: 'Direct Chat',
+      icon: 'whatsapp',
+    },
   ],
+  resume: {
+    label: 'Curriculum.pdf',
+    url: '/cv/CV_WerlynRodriguez_ATS_ES.pdf',
+    downloadName: 'CV_WerlynRodriguez.pdf',
+  },
 };

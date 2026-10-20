@@ -6,4 +6,9 @@ export default {
   mailtoLabel: 'Enviar Correo',
   mailtoAria: 'Enviar correo a rdwerlynjose.16@gmail.com',
   socialsAria: 'Redes sociales',
+  emailHeading: 'Correo Directo',
+  socialsHeading: 'Redes Sociales',
+  resumeHeading: 'Currículum',
+  resumeViewAria: 'Ver currículum en nueva pestaña (Curriculum.pdf)',
+  resumeDownloadAria: 'Descargar currículum (Curriculum.pdf)',
 } as const;

@@ -46,10 +46,16 @@ export type SkillsData = SkillItem[];
 export interface SocialLink {
   name: string;
   url: string;
+  handle: string;
   icon?: string;
 }
 
 export interface ContactData {
   email: string;
   socials: SocialLink[];
+  resume: {
+    label: string;
+    url: string;
+    downloadName: string;
+  };
 }
