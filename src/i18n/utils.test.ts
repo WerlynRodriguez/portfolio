@@ -44,11 +44,9 @@ describe('i18n utils', () => {
     it('retrieves scoped translations for a specific namespace', () => {
       const tHeroEn = useTranslations('en', 'hero');
       expect(tHeroEn('title')).toBe('WERLYN');
-      expect(tHeroEn('cta.projects')).toBe('View Projects');
 
       const tHeroEs = useTranslations('es', 'hero');
       expect(tHeroEs('title')).toBe('WERLYN');
-      expect(tHeroEs('cta.projects')).toBe('Ver Proyectos');
     });
 
     it('interpolates parameters when provided', () => {

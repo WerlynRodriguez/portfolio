@@ -62,8 +62,8 @@ body {
 main#main-content {
   display: flex;
   flex-direction: column;
-  gap: 48px;
-  padding-block: 32px 64px;
+  gap: var(--spacing-section-gap);
+  padding-block: 32px 80px;
 }
 
 /* Typography styles */

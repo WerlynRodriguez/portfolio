@@ -15,6 +15,6 @@ export default {
   'metric.english.label': 'English Proficiency',
   'metric.coffee.label': 'Coffe Driven',
   'actions.aria': 'Acciones rápidas',
-  'cta.projects': 'Ver Proyectos',
-  'cta.contact': 'Contactar',
+  'cta.exp': 'Mi trayectoria',
+  'cta.contact': 'Conversemos',
 } as const;

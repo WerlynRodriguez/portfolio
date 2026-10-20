@@ -80,6 +80,7 @@
   --spacing-margin-desktop: 32px;
   --spacing-margin-tablet: 24px;
   --spacing-margin-mobile: 16px;
+  --spacing-section-gap: clamp(64px, 7vw, 88px);
 
   /* Elevation & Shadows */
   --shadow-hard-base: 3px 3px 0px var(--colors-outline-subtle);
