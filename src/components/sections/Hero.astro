@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { type Locale, useTranslations } from '@i18n/utils';
 import { Icon } from 'astro-icon/components';
 import heroPortrait from '@/assets/hero-portrait.webp';
@@ -66,25 +67,24 @@ const lastNameChars = t('lastName').split('');
 
         <div class="hero-media">
             <figure class="hero-portrait cad-frame">
-                <picture class="hero-picture">
-                    <source srcset={heroPortrait.src} type="image/webp" />
-                    <img
-                        src={heroPortrait.src}
-                        alt={t("photo.alt")}
-                        width="480"
-                        height="480"
-                        loading="eager"
-                        fetchpriority="high"
-                        decoding="async"
-                        class="hero-img"
-                    />
-                </picture>
+                <Image
+                    src={heroPortrait}
+                    alt={t("photo.alt")}
+                    width={480}
+                    height={480}
+                    widths={[240, 360, 480, 720, 960]}
+                    sizes="(max-width: 640px) 100vw, 480px"
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async"
+                    class="hero-img"
+                />
                 <figcaption class="hero-photo-caption">
                     {t("photo.caption")}
                 </figcaption>
             </figure>
 
-            <aside class="hero-separator" aria-label="Highlights">
+            <aside class="hero-separator" aria-label={t("highlights.aria")}>
                 <div class="separator-item">
                     <span class="separator-val">8.22</span>
                     <span class="separator-label">{t("metric.gpa.label")}</span>

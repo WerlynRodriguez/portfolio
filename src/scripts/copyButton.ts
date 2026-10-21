@@ -10,8 +10,10 @@ export function setState(
   btn.dataset.state = state;
   const live = btn.querySelector('[role="status"]');
   if (live) {
+    const copiedText = btn.dataset.copiedText || 'Copied';
+    const errorText = btn.dataset.errorText || 'Copy failed';
     live.textContent =
-      state === 'copied' ? 'Copied' : state === 'error' ? 'Copy failed' : '';
+      state === 'copied' ? copiedText : state === 'error' ? errorText : '';
   }
 
   const timer = timers.get(btn);

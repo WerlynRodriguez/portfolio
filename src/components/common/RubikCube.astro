@@ -163,7 +163,12 @@ const t = useTranslations(lang, 'overview');
     .rubik-figure .rubik-stage {
         position: relative;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
         user-select: none;
+        touch-action: manipulation;
         outline: none;
     }
 

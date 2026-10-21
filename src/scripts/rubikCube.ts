@@ -50,16 +50,6 @@ export function translateCss(delta: [number, number, number]): string {
   return `translate(${x.toFixed(3)}%, ${y.toFixed(3)}%)`;
 }
 
-/**
- * @deprecated use translateCss; emits SVG attribute format, not CSS transform.
- */
-export function translateIso(delta: [number, number, number]): string {
-  const [dx, dy, dz] = delta;
-  const x = dx * K_C - dy * K_S;
-  const y = dx * K_S_E + dy * K_C_E - dz * K_Z;
-  return `translate(${f2(x)} ${f2(y)})`;
-}
-
 export function needlePathAt(turn: number): string {
   const angle = turn * Math.PI * 2;
   const s = Math.sin(angle);
@@ -177,7 +167,15 @@ export function initRubikCube(root: ParentNode = document): void {
 
     stage.addEventListener('click', () => triggerShake());
     stage.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.key === ' ' || event.key === 'Enter') {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        triggerShake();
+      } else if (event.key === ' ') {
+        event.preventDefault();
+      }
+    });
+    stage.addEventListener('keyup', (event: KeyboardEvent) => {
+      if (event.key === ' ') {
         event.preventDefault();
         triggerShake();
       }

@@ -2,6 +2,7 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import ThemeSwitcher from '@components/common/ThemeSwitcher.astro';
 import { type Locale, useTranslations } from '@i18n/utils';
+import { Icon } from 'astro-icon/components';
 
 interface Props {
   lang: Locale;
@@ -20,12 +21,34 @@ const navItems = [
 ];
 ---
 
-<header class="site-header site-container separator">
-    <nav class="main-nav" aria-label={t("nav.aria")}>
+<header class="site-header site-container separator" data-mobile-header data-open="false">
+    <button
+        type="button"
+        class="btn-cad mobile-nav-trigger"
+        id="mobile-nav-trigger"
+        aria-expanded="false"
+        aria-controls="main-nav"
+        aria-label={t("nav.menuOpenAria")}
+        data-open-label={t("nav.menuOpenAria")}
+        data-close-label={t("nav.menuCloseAria")}
+        data-mobile-nav-trigger
+    >
+        <span class="trigger-icon" aria-hidden="true">
+            <Icon name="menu-2" size={18} class="icon-menu" />
+            <Icon name="x" size={18} class="icon-close" />
+        </span>
+        <span class="trigger-label">{t("nav.menuLabel")}</span>
+    </button>
+
+    <nav id="main-nav" class="main-nav" aria-label={t("nav.aria")} data-mobile-nav-drawer>
         <ul>
-            {navItems.map((item) => (
+            {navItems.map((item, idx) => (
                 <li>
-                    <a href={item.href}>{item.label}</a>
+                    <a href={item.href} class="nav-link" data-nav-link>
+                        <span class="nav-index" aria-hidden="true">0{idx + 1}</span>
+                        <span class="nav-text">{item.label}</span>
+                        <Icon name="arrow-badge-right" size={16} class="nav-arrow" aria-hidden="true" />
+                    </a>
                 </li>
             ))}
         </ul>
@@ -58,9 +81,15 @@ const navItems = [
         </nav>
     </div>
 </header>
+<div class="mobile-nav-backdrop" data-mobile-nav-backdrop aria-hidden="true"></div>
+
+<script>
+    import "@scripts/mobileNav";
+</script>
 
 <style>
     .site-header {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -85,19 +114,267 @@ const navItems = [
         padding: 0;
         margin: 0;
     }
-    .main-nav a,
-    .lang-nav a {
+    .nav-link,
+    .lang-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 8px 10px;
         color: var(--colors-on-surface-muted);
         text-decoration: none;
         transition: color var(--transition-micro);
     }
-    .main-nav a:hover,
-    .lang-nav a:hover {
+    .lang-link {
+        min-width: 44px;
+        border-bottom: 2px solid transparent;
+    }
+    .nav-link:hover,
+    .lang-link:hover {
         color: var(--colors-on-background);
     }
     .lang-link.active {
         color: var(--colors-primary-light);
         font-weight: var(--font-weight-semibold);
-        border-bottom: 2px solid var(--colors-primary-light);
+        border-bottom-color: var(--colors-primary-light);
+    }
+
+    /* Mobile elements hidden by default on Desktop & Tablet (>= 640px) */
+    .mobile-nav-trigger,
+    .mobile-nav-backdrop,
+    .nav-index,
+    .nav-arrow {
+        display: none;
+    }
+
+    /* Mobile view (< 640px) */
+    @media (max-width: 639px) {
+        .site-header {
+            position: relative;
+            z-index: 90;
+            background-color: var(--colors-background);
+            flex-wrap: nowrap;
+            padding-block: 12px;
+        }
+
+        .header-actions {
+            gap: 12px;
+        }
+
+        /* Mobile Trigger Button */
+        .mobile-nav-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            min-width: 44px;
+            padding: 8px 12px;
+            font-family: var(--font-mono-console);
+            font-size: var(--font-size-body-sm);
+            font-weight: var(--font-weight-medium);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background-color: var(--colors-surface-elevated);
+            border: 1px solid var(--colors-outline-subtle);
+            color: var(--colors-on-surface);
+            cursor: pointer;
+            outline-offset: 6px;
+            transition:
+                background-color var(--transition-micro),
+                border-color var(--transition-micro),
+                color var(--transition-micro),
+                outline var(--transition-micro),
+                outline-offset var(--transition-micro);
+        }
+
+        .mobile-nav-trigger:hover {
+            background-color: var(--colors-surface);
+            border-color: var(--colors-outline);
+            color: var(--colors-on-surface);
+            outline: 2px dashed var(--colors-punctual);
+            outline-offset: 2px;
+        }
+
+        .mobile-nav-trigger:focus-visible {
+            outline: 2px solid var(--colors-punctual);
+            outline-offset: 2px;
+        }
+
+        .trigger-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: inherit;
+        }
+
+        .icon-menu {
+            display: inline-flex;
+        }
+
+        .icon-close {
+            display: none;
+        }
+
+        .site-header[data-open="true"] .icon-menu {
+            display: none;
+        }
+
+        .site-header[data-open="true"] .icon-close {
+            display: inline-flex;
+        }
+
+        .site-header[data-open="true"] .mobile-nav-trigger {
+            background-color: var(--colors-surface);
+            border-color: var(--colors-primary-light);
+            color: var(--colors-primary-light);
+            outline: 2px dashed var(--colors-punctual);
+            outline-offset: 2px;
+        }
+
+        /* Mobile Top Drawer Panel (applied when JS is enabled) */
+        :global(html.js) .main-nav {
+            position: absolute;
+            top: calc(100% + 2px);
+            left: 0;
+            right: 0;
+            z-index: 95;
+            background-color: var(--colors-surface-elevated);
+            border-top: 1px solid var(--colors-outline-subtle);
+            border-bottom: 2px solid var(--colors-primary);
+            box-shadow: 0 8px 0px var(--colors-outline-subtle);
+            padding: 8px var(--spacing-margin-mobile) 16px;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+            transition:
+                opacity 180ms ease-out,
+                transform 180ms ease-out,
+                visibility 0s linear 180ms;
+        }
+
+        :global(html.js) .site-header[data-open="true"] .main-nav {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            transition:
+                opacity 180ms ease-out,
+                transform 180ms ease-out,
+                visibility 0s linear 0s;
+        }
+
+        :global(html.js) .main-nav ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            width: 100%;
+        }
+
+        :global(html.js) .main-nav li {
+            width: 100%;
+            border-bottom: 1px dotted var(--colors-outline-subtle);
+        }
+
+        :global(html.js) .main-nav li:last-child {
+            border-bottom: none;
+        }
+
+        :global(html.js) .main-nav .nav-link {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            text-align: left;
+            background-color: transparent;
+            transition:
+                background-color var(--transition-micro),
+                color var(--transition-micro);
+        }
+
+        :global(html.js) .main-nav .nav-link:hover,
+        :global(html.js) .main-nav .nav-link:focus-visible {
+            background-color: var(--colors-surface);
+            color: var(--colors-on-background);
+            outline: 2px dashed var(--colors-punctual);
+            outline-offset: -2px;
+        }
+
+        :global(html.js) .nav-index {
+            display: inline-block;
+            font-family: var(--font-mono-console);
+            font-size: var(--font-size-caption);
+            color: var(--colors-primary-light);
+            letter-spacing: 0.05em;
+            flex-shrink: 0;
+        }
+
+        :global(html.js) .nav-text {
+            flex: 1 1 auto;
+            font-family: var(--font-mono-display);
+            font-size: var(--font-size-body-md);
+            font-weight: var(--font-weight-medium);
+            color: var(--colors-on-surface);
+        }
+
+        :global(html.js) .nav-arrow {
+            display: inline-flex;
+            color: var(--colors-on-surface-muted);
+            transition:
+                transform var(--transition-micro),
+                color var(--transition-micro);
+        }
+
+        :global(html.js) .main-nav .nav-link:hover .nav-arrow,
+        :global(html.js) .main-nav .nav-link:focus-visible .nav-arrow {
+            transform: translateX(4px);
+            color: var(--colors-punctual);
+        }
+
+        /* Mobile Backdrop */
+        .mobile-nav-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            background-color: rgb(0 0 0 / 0.65);
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition:
+                opacity 180ms ease-out,
+                visibility 0s linear 180ms;
+        }
+
+        .mobile-nav-backdrop[data-open="true"] {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            transition:
+                opacity 180ms ease-out,
+                visibility 0s linear 0s;
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            :global(html.js) .main-nav,
+            .mobile-nav-backdrop,
+            :global(html.js) .nav-arrow {
+                transition: none !important;
+                transform: none !important;
+            }
+        }
+
+        /* Zero-JS Graceful Degradation */
+        :global(html:not(.js)) .mobile-nav-trigger {
+            display: none;
+        }
+        :global(html:not(.js)) .mobile-nav-backdrop {
+            display: none;
+        }
     }
 </style>

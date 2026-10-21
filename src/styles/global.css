@@ -1,4 +1,5 @@
 @import "./tokens.css";
+@import "./fonts.css";
 
 /* Modern CSS Reset */
 *,
@@ -66,6 +67,10 @@ main#main-content {
   padding-block: 32px 80px;
 }
 
+main#main-content:focus {
+  outline: none;
+}
+
 /* Typography styles */
 h1,
 h2,
@@ -77,44 +82,6 @@ h6 {
   color: var(--colors-on-background);
   font-weight: var(--font-weight-semibold);
   letter-spacing: -0.01em;
-}
-
-.billboard-title {
-  font-family: var(--font-mono-display);
-  font-size: var(--font-size-hero);
-  font-weight: var(--font-weight-black);
-  line-height: 1.05;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  overflow-wrap: break-word;
-}
-
-/* Section Header & Decorative Numbering */
-.section-header {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  margin-bottom: 24px;
-  border-bottom: 1px dotted var(--colors-outline-subtle);
-  padding-bottom: 12px;
-}
-
-.section-num {
-  font-family: var(--font-mono-console);
-  font-size: var(--font-size-h3);
-  color: var(--colors-on-surface-muted);
-  opacity: 0.55;
-  letter-spacing: 0.05em;
-  user-select: none;
-}
-
-.section-title {
-  font-family: var(--font-mono-display);
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-black);
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  margin: 0;
 }
 
 /* CAD Frame with Corner Crosshairs (Background-Image Linear Gradient Technique) */
@@ -239,77 +206,6 @@ h6 {
   outline: 2px dashed var(--colors-punctual);
 }
 
-.tag-cad {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  font-family: var(--font-mono-console);
-  font-size: var(--font-size-caption);
-  background-color: var(--colors-surface-elevated);
-  color: var(--colors-on-surface-muted);
-  border: 1px solid var(--colors-outline-subtle);
-  outline-offset: 6px;
-  transition:
-    transform var(--transition-micro),
-    outline var(--transition-micro),
-    outline-offset var(--transition-micro),
-    color var(--transition-micro);
-}
-
-.tag-cad:hover {
-  outline: 2px dashed var(--colors-punctual);
-  outline-offset: 2px;
-  color: var(--colors-on-surface);
-}
-
-/* Bento Grid System */
-.bento-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-@media (min-width: 768px) {
-  .bento-grid {
-    grid-template-columns: repeat(12, 1fr);
-  }
-  .bento-grid > *:nth-child(1) {
-    grid-column: span 12;
-  }
-  .bento-grid > *:nth-child(2) {
-    grid-column: span 7;
-  }
-  .bento-grid > *:nth-child(3) {
-    grid-column: span 5;
-  }
-  .bento-grid > *:nth-child(n + 4) {
-    grid-column: span 6;
-  }
-}
-
-.bento-card {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid var(--colors-outline-subtle);
-}
-
-.bento-surface-default {
-  background-color: var(--colors-surface);
-}
-
-.bento-surface-elevated {
-  background-color: var(--colors-surface-elevated);
-}
-
-.bento-surface-dim {
-  background-color: var(--colors-surface-dim);
-}
-
 .separator-dashed {
   border-bottom: 2px dashed var(--colors-outline-subtle);
 }
@@ -350,4 +246,30 @@ h6 {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Skip to content link (WCAG 2.4.1) */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: var(--colors-surface-elevated);
+  color: var(--colors-on-surface);
+  border: 1px solid var(--colors-primary);
+  font-family: var(--font-mono-console);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: top var(--transition-micro);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 16px;
+  outline: 2px dashed var(--colors-punctual);
+  outline-offset: 2px;
 }

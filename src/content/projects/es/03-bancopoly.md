@@ -14,7 +14,7 @@ primaryTech:
 secondaryTech:
   - Tailwind
   - Real-time
-image: /projects/bancopoly.webp
+image: ../../../assets/projects/bancopoly.webp
 imageAlt: Panel de transacciones y títulos de propiedad en tiempo real de Bancopoly
 repoUrl: https://github.com/WerlynRodriguez/Bancopoly
 ---

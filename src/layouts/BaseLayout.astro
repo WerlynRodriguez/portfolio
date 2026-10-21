@@ -114,16 +114,26 @@ const ogAlternateLocale = lang === 'es' ? 'en_US' : 'es_ES';
                 });
             })();
         </script>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <!-- Self-hosted font preloads to prevent layout shifts (CLS) -->
         <link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;800&family=Roboto+Mono:wght@400;500&family=Share+Tech+Mono&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            href="/fonts/jetbrains-mono-latin.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            href="/fonts/roboto-mono-latin.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
         />
     </head>
     <body>
+        <a href="#main-content" class="skip-link">{t("skip.link")}</a>
         <Header lang={lang} />
-        <main id="main-content" class="site-container">
+        <main id="main-content" class="site-container" tabindex="-1">
             <slot />
         </main>
         <Footer lang={lang} />

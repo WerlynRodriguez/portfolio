@@ -2,7 +2,7 @@ export default {
   'meta.title': 'Werlyn - Desarrollador de Software',
   'meta.description':
     'Portafolio personal de Werlyn, Desarrollador de Software. Construido con HTML semántico, TypeScript estricto y Astro.',
-  'skip.link': 'Saltar al contenido principal',
+  'skip.link': 'Saltar al contenido',
   'nav.aria': 'Navegación principal',
   'nav.langAria': 'Selección de idioma',
   'nav.overview': 'Resumen',
@@ -11,6 +11,9 @@ export default {
   'nav.skills': 'Habilidades',
   'nav.academics': 'Académico',
   'nav.contact': 'Contacto',
+  'nav.menuLabel': 'MENÚ',
+  'nav.menuOpenAria': 'Abrir menú de navegación',
+  'nav.menuCloseAria': 'Cerrar menú de navegación',
   'lang.en': 'EN',
   'lang.es': 'ES',
   'footer.heading': 'Contacto',

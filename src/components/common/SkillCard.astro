@@ -5,9 +5,20 @@ import type { SkillItem } from '@/types/data';
 interface Props {
   skill: SkillItem;
   stackLabel?: string;
+  stackAria?: string;
+  coreLabel?: string;
+  supportingLabel?: string;
+  lang?: string;
 }
 
-const { skill, stackLabel = 'STACK' } = Astro.props;
+const {
+  skill,
+  lang = 'en',
+  stackLabel = 'STACK',
+  stackAria = lang === 'es' ? 'tecnologías' : 'stack',
+  coreLabel = lang === 'es' ? 'Pila principal' : 'Core stack',
+  supportingLabel = lang === 'es' ? 'Pila secundaria' : 'Supporting stack',
+} = Astro.props;
 ---
 
 <article class="skill-card cad-frame">
@@ -16,8 +27,10 @@ const { skill, stackLabel = 'STACK' } = Astro.props;
   <PillStack
     primaryTech={skill.primaryTech}
     secondaryTech={skill.secondaryTech}
-    ariaLabel={`${skill.title} stack`}
+    ariaLabel={`${skill.title} ${stackAria}`}
     stackLabel={stackLabel}
+    coreLabel={coreLabel}
+    supportingLabel={supportingLabel}
     layout="masonry"
   />
 </article>

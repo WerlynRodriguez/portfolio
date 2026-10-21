@@ -8,6 +8,8 @@ interface Props {
   ariaLabel?: string;
   id?: string;
   class?: string;
+  copiedText?: string;
+  errorText?: string;
 }
 
 const {
@@ -17,6 +19,8 @@ const {
   ariaLabel,
   id,
   class: className = '',
+  copiedText,
+  errorText,
 } = Astro.props;
 ---
 
@@ -27,6 +31,8 @@ const {
     data-button-copy
     data-value={data}
     data-state="idle"
+    data-copied-text={copiedText}
+    data-error-text={errorText}
     aria-label={ariaLabel}
 >
     {prefixIcon ? (

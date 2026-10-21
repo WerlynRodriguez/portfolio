@@ -9,4 +9,9 @@ export default {
   nextProject: 'Next project',
   achievementLabel: 'Achievement',
   listAriaLabel: 'Project selection',
+  mobileNavAria: 'Mobile project navigation',
+  schematicLabel: 'ARCH_SCHEMATIC',
+  techStackAria: 'tech stack',
+  coreStackAria: 'Core stack',
+  supportingStackAria: 'Supporting stack',
 } as const;

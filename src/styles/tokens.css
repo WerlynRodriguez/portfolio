@@ -134,7 +134,7 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    :root:not(:has(> head > meta[name="color-scheme"][content="light"])) {
+    :root:not([data-active-theme="light"]) {
       --colors-background: #050505;
       --colors-on-background: #dddbcb;
       --colors-surface: #141414;

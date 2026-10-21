@@ -4,6 +4,8 @@ interface Props {
   secondaryTech?: string[];
   ariaLabel: string;
   stackLabel?: string;
+  coreLabel?: string;
+  supportingLabel?: string;
   layout?: 'flow' | 'masonry';
 }
 
@@ -12,6 +14,8 @@ const {
   secondaryTech = [],
   ariaLabel,
   stackLabel = 'STACK',
+  coreLabel = 'Core stack',
+  supportingLabel = 'Supporting stack',
   layout = 'flow',
 } = Astro.props;
 ---
@@ -21,14 +25,14 @@ const {
   {layout === 'masonry' ? (
     <div class="stack-masonry" aria-label={ariaLabel}>
       {primaryTech.length > 0 && (
-        <ul class="primary-stack" aria-label="Core stack">
+        <ul class="primary-stack" aria-label={coreLabel}>
           {primaryTech.map((tech) => (
             <li class="tech-pill primary-pill">{tech}</li>
           ))}
         </ul>
       )}
       {secondaryTech.length > 0 && (
-        <ul class="secondary-stack" aria-label="Supporting stack">
+        <ul class="secondary-stack" aria-label={supportingLabel}>
           {secondaryTech.map((tech) => (
             <li class="tech-pill secondary-pill">[{tech}]</li>
           ))}

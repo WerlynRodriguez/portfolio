@@ -297,3 +297,59 @@ test.describe('Technical-Editorial Design System', () => {
     expect(hasHorizontalOverflow).toBe(false);
   });
 });
+
+test.describe('Mobile Navigation Top Drawer', () => {
+  test('keeps desktop navigation unchanged on viewports >= 640px', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto('/');
+
+    const trigger = page.locator('#mobile-nav-trigger');
+    await expect(trigger).toBeHidden();
+
+    const mainNav = page.locator('#main-nav');
+    await expect(mainNav).toBeVisible();
+    await expect(mainNav.locator('a.nav-link')).toHaveCount(6);
+  });
+
+  test('toggles top drawer, navigates on link click, and dismisses on outside tap (mobile)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+
+    const header = page.locator('header[data-mobile-header]');
+    const trigger = page.locator('#mobile-nav-trigger');
+    const mainNav = page.locator('#main-nav');
+    const backdrop = page.locator('.mobile-nav-backdrop');
+
+    await expect(trigger).toBeVisible();
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(header).toHaveAttribute('data-open', 'false');
+
+    // Open drawer
+    await trigger.click();
+    await expect(header).toHaveAttribute('data-open', 'true');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(backdrop).toBeVisible();
+
+    // Verify Axe accessibility in open drawer state
+    const axeResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa'])
+      .analyze();
+    expect(axeResults.violations).toEqual([]);
+
+    // Click link inside drawer -> closes drawer
+    const projectsLink = mainNav.locator('a[href="#projects"]');
+    await projectsLink.click();
+    await expect(header).toHaveAttribute('data-open', 'false');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    // Reopen and test outside click dismissal
+    await trigger.click();
+    await expect(header).toHaveAttribute('data-open', 'true');
+    await backdrop.click({ position: { x: 10, y: 400 } });
+    await expect(header).toHaveAttribute('data-open', 'false');
+  });
+});

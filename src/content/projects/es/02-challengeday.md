@@ -14,7 +14,7 @@ primaryTech:
 secondaryTech:
   - Mobile UI
 achievement: 2do lugar
-image: /projects/challengeday.webp
+image: ../../../assets/projects/challengeday.webp
 imageAlt: Prototipo de ChallengeDay premiado con el 2do lugar
 repoUrl: https://github.com/WerlynRodriguez/ChallengeDay
 ---

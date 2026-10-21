@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import PillStack from '@components/common/PillStack.astro';
 import SectionHeader from '@components/common/SectionHeader.astro';
@@ -98,7 +99,7 @@ const projects = rawProjects.sort(
                                     aria-hidden="true"
                                 >
                                     <figcaption class="panel-fig-caption">
-                                        ARCH_SCHEMATIC
+                                        {t("schematicLabel")}
                                     </figcaption>
                                     <span class="blueprint-coords">
                                         X:{120 + index * 30} Y:
@@ -107,13 +108,19 @@ const projects = rawProjects.sort(
                                 </div>
                                 {project.data.image && (
                                     <div class="panel-media">
-                                        <img
+                                        <Image
                                             src={project.data.image}
                                             alt={
                                                 project.data.imageAlt ??
                                                 `${project.data.title} preview`
                                             }
                                             class="panel-img"
+                                            widths={
+                                                project.data.image.width >= 720
+                                                    ? [360, 540, 720, project.data.image.width]
+                                                    : [project.data.image.width]
+                                            }
+                                            sizes="(max-width: 768px) 100vw, 720px"
                                             loading={index === 0 ? "eager" : "lazy"}
                                             decoding="async"
                                         />
@@ -196,7 +203,9 @@ const projects = rawProjects.sort(
                             <PillStack
                                 primaryTech={project.data.primaryTech}
                                 secondaryTech={project.data.secondaryTech}
-                                ariaLabel={`${project.data.title} tech stack`}
+                                ariaLabel={`${project.data.title} ${t("techStackAria")}`}
+                                coreLabel={t("coreStackAria")}
+                                supportingLabel={t("supportingStackAria")}
                             />
                         </article>
                     );
@@ -204,9 +213,9 @@ const projects = rawProjects.sort(
             </div>
 
             {/* Mobile Navigation Controls - Placed below panels */}
-            <div
+            <nav
                 class="mobile-nav-bar cad-frame"
-                aria-label="Mobile project navigation"
+                aria-label={t("mobileNavAria")}
             >
                 <button
                     type="button"
@@ -250,7 +259,7 @@ const projects = rawProjects.sort(
                         />
                     </button>
                 </div>
-            </div>
+            </nav>
         </div>
     </div>
 </section>
@@ -392,8 +401,8 @@ const projects = rawProjects.sort(
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 6px 12px;
-        min-height: 36px;
+        padding: 8px 14px;
+        min-height: 44px;
         font-size: var(--font-size-caption);
     }
 
@@ -414,8 +423,10 @@ const projects = rawProjects.sort(
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 36px;
-        height: 36px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
         padding: 0;
         line-height: 1;
         aspect-ratio: 1/1;
@@ -640,17 +651,21 @@ const projects = rawProjects.sort(
             grid-template-columns: 1fr;
         }
 
-        .mobile-nav-bar {
+        :global(html.js) .mobile-nav-bar {
             display: flex;
         }
 
-        /* When viewing list on mobile, hide the detail container */
-        .projects-explorer[data-mobile-view="list"] .projects-detail {
+        /* When viewing list on mobile with JS enabled, hide the detail container */
+        :global(html.js)
+            .projects-explorer[data-mobile-view="list"]
+            .projects-detail {
             display: none;
         }
 
-        /* When viewing detail on mobile, hide the master list */
-        .projects-explorer[data-mobile-view="detail"] .projects-master {
+        /* When viewing detail on mobile with JS enabled, hide the master list */
+        :global(html.js)
+            .projects-explorer[data-mobile-view="detail"]
+            .projects-master {
             display: none;
         }
 

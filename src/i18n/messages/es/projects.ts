@@ -9,4 +9,9 @@ export default {
   nextProject: 'Siguiente proyecto',
   achievementLabel: 'Logro',
   listAriaLabel: 'Selección de proyectos',
+  mobileNavAria: 'Navegación móvil de proyectos',
+  schematicLabel: 'ESQUEMA_ARQ',
+  techStackAria: 'pila tecnológica',
+  coreStackAria: 'Pila principal',
+  supportingStackAria: 'Pila secundaria',
 } as const;

@@ -23,7 +23,14 @@ const skills = lang === 'es' ? esSkills : enSkills;
     />
     <div class="skills-grid">
         {skills.map((skill) => (
-            <SkillCard skill={skill} />
+            <SkillCard
+                skill={skill}
+                stackLabel={t("stack")}
+                stackAria={t("stackAria")}
+                coreLabel={t("coreStackAria")}
+                supportingLabel={t("supportingStackAria")}
+                lang={lang}
+            />
         ))}
     </div>
 </section>

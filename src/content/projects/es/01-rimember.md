@@ -13,7 +13,7 @@ primaryTech:
   - i18Next
 secondaryTech:
   - Google Console
-image: /projects/rimember.webp
+image: ../../../assets/projects/rimember.webp
 imageAlt: Captura de Rimember en Google Play Store con calificación alta
 repoUrl: https://github.com/WerlynRodriguez/Rimember
 ---

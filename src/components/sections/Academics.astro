@@ -43,12 +43,12 @@ const certificates = lang === 'es' ? esCertificates : enCertificates;
   </ul>
 
   <div class="certificates-container">
-    <h4 class="certificates-heading">
+    <h3 class="certificates-heading">
       <span class="cert-heading-icon-wrap" aria-hidden="true">
         <Icon name="award" size={16} class="cert-heading-icon" />
       </span>
       <span>{t('certificatesHeading')}</span>
-    </h4>
+    </h3>
     <div class="certificates-grid">
       {certificates.map((cert) => (
         <a
@@ -63,7 +63,7 @@ const certificates = lang === 'es' ? esCertificates : enCertificates;
               <Icon name="award" size={20} class="cert-icon" />
             </div>
             <div class="cert-info">
-              <span class="cert-name">{cert.name}</span>
+              <h4 class="cert-name">{cert.name}</h4>
               <span class="cert-issuer">
                 {t('atIssuer')} {cert.issuer}
               </span>
@@ -209,6 +209,8 @@ const certificates = lang === 'es' ? esCertificates : enCertificates;
     font-size: var(--font-size-body-sm);
     font-weight: var(--font-weight-semibold);
     color: var(--colors-on-background);
+    margin: 0;
+    line-height: 1.3;
   }
 
   .cert-issuer {

@@ -32,6 +32,8 @@ const contact = lang === 'es' ? esContact : enContact;
         data={contact.email}
         prefixIcon="mail"
         ariaLabel={t('copyEmailAria')}
+        copiedText={t('copied')}
+        errorText={t('copyFailed')}
       />
 
       <a

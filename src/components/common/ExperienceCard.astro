@@ -8,10 +8,21 @@ interface Props {
   role: RoleItem;
   presentLabel: string;
   stackLabel?: string;
+  techStackAria?: string;
+  coreLabel?: string;
+  supportingLabel?: string;
   lang?: Locale;
 }
 
-const { role, presentLabel, stackLabel = 'STACK', lang = 'en' } = Astro.props;
+const {
+  role,
+  presentLabel,
+  lang = 'en',
+  stackLabel = 'STACK',
+  techStackAria = lang === 'es' ? 'pila tecnológica' : 'tech stack',
+  coreLabel = lang === 'es' ? 'Pila principal' : 'Core stack',
+  supportingLabel = lang === 'es' ? 'Pila secundaria' : 'Supporting stack',
+} = Astro.props;
 
 const calculatedDuration = calculateDuration(
   role.period.start,
@@ -66,8 +77,10 @@ const calculatedDuration = calculateDuration(
     <PillStack
         primaryTech={role.primaryTech}
         secondaryTech={role.secondaryTech}
-        ariaLabel={`${role.title} tech stack`}
+        ariaLabel={`${role.title} ${techStackAria}`}
         stackLabel={stackLabel}
+        coreLabel={coreLabel}
+        supportingLabel={supportingLabel}
     />
 </article>
 

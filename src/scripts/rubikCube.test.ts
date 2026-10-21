@@ -1,10 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import {
-  evaluateRubikShake,
-  initRubikCube,
-  translateCss,
-  translateIso,
-} from './rubikCube';
+import { evaluateRubikShake, initRubikCube, translateCss } from './rubikCube';
 
 describe('rubikCube', () => {
   describe('evaluateRubikShake', () => {
@@ -38,16 +33,6 @@ describe('rubikCube', () => {
       expect(translateCss([0, 0, 0])).toBe('translate(0.000%, 0.000%)');
       const shifted = translateCss([2, -1, 0.5]);
       expect(shifted).toMatch(/^translate\(-?\d+\.\d{3}%, -?\d+\.\d{3}%\)$/);
-    });
-  });
-
-  describe('translateIso', () => {
-    it('projects 3D isometric offset vector into 2D SVG translate string', () => {
-      const transform = translateIso([0, 0, 0]);
-      expect(transform).toBe('translate(0.00 0.00)');
-
-      const shifted = translateIso([2, -1, 0.5]);
-      expect(shifted).toMatch(/^translate\(-?\d+\.\d{2} -?\d+\.\d{2}\)$/);
     });
   });
 
@@ -218,6 +203,145 @@ describe('rubikCube', () => {
         }
       }
       expect(stage.dataset.animating).toBeUndefined();
+
+      vi.unstubAllGlobals();
+    });
+
+    it('prevents default scroll on Space keydown and triggers shake on Space keyup', () => {
+      const listeners: Record<string, ((event: unknown) => void)[]> = {};
+      const topLayer = { style: { transform: '' }, setAttribute: vi.fn() };
+      const lowerLayer = { style: { transform: '' }, setAttribute: vi.fn() };
+      const needle = { setAttribute: vi.fn() };
+      const readout = {
+        textContent: '',
+        getAttribute: vi.fn(() => 'locked'),
+      };
+      const stageAttrs: Record<string, string> = {};
+      const stage = {
+        dataset: {} as Record<string, string>,
+        getAttribute: vi.fn((key: string) => stageAttrs[key] ?? null),
+        setAttribute: vi.fn((key: string, val: string) => {
+          stageAttrs[key] = val;
+        }),
+        addEventListener: vi.fn(
+          (type: string, handler: (event: unknown) => void) => {
+            listeners[type] = listeners[type] ?? [];
+            listeners[type].push(handler);
+          },
+        ),
+        querySelector: vi.fn((sel: string) => {
+          if (sel === '[data-part="top-layer"]') return topLayer;
+          if (sel === '[data-part="cube-lower"]') return lowerLayer;
+          if (sel === '[data-part="needle"]') return needle;
+          return null;
+        }),
+      };
+      const figure = {
+        querySelector: vi.fn((sel: string) => {
+          if (sel === '[data-rubik-stage]') return stage;
+          if (sel === '[data-readout]') return readout;
+          return null;
+        }),
+      };
+      const root = {
+        querySelectorAll: vi.fn(() => [figure]),
+      } as unknown as ParentNode;
+
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn(() => ({ matches: false })),
+      );
+      let rafCalled = false;
+      vi.stubGlobal(
+        'requestAnimationFrame',
+        vi.fn(() => {
+          rafCalled = true;
+          return 1;
+        }),
+      );
+
+      initRubikCube(root);
+
+      // Other keys do nothing
+      const tabEvent = { key: 'Tab', preventDefault: vi.fn() };
+      listeners.keydown?.[0]?.(tabEvent);
+      expect(tabEvent.preventDefault).not.toHaveBeenCalled();
+      expect(rafCalled).toBe(false);
+
+      // Space on keydown prevents default scroll but does NOT trigger shake
+      const spaceDown = { key: ' ', preventDefault: vi.fn() };
+      listeners.keydown?.[0]?.(spaceDown);
+      expect(spaceDown.preventDefault).toHaveBeenCalled();
+      expect(rafCalled).toBe(false);
+
+      // Space on keyup prevents default and triggers shake
+      const spaceUp = { key: ' ', preventDefault: vi.fn() };
+      listeners.keyup?.[0]?.(spaceUp);
+      expect(spaceUp.preventDefault).toHaveBeenCalled();
+      expect(rafCalled).toBe(true);
+
+      vi.unstubAllGlobals();
+    });
+
+    it('triggers shake immediately on Enter keydown', () => {
+      const listeners: Record<string, ((event: unknown) => void)[]> = {};
+      const topLayer = { style: { transform: '' }, setAttribute: vi.fn() };
+      const lowerLayer = { style: { transform: '' }, setAttribute: vi.fn() };
+      const needle = { setAttribute: vi.fn() };
+      const readout = {
+        textContent: '',
+        getAttribute: vi.fn(() => 'locked'),
+      };
+      const stageAttrs: Record<string, string> = {};
+      const stage = {
+        dataset: {} as Record<string, string>,
+        getAttribute: vi.fn((key: string) => stageAttrs[key] ?? null),
+        setAttribute: vi.fn((key: string, val: string) => {
+          stageAttrs[key] = val;
+        }),
+        addEventListener: vi.fn(
+          (type: string, handler: (event: unknown) => void) => {
+            listeners[type] = listeners[type] ?? [];
+            listeners[type].push(handler);
+          },
+        ),
+        querySelector: vi.fn((sel: string) => {
+          if (sel === '[data-part="top-layer"]') return topLayer;
+          if (sel === '[data-part="cube-lower"]') return lowerLayer;
+          if (sel === '[data-part="needle"]') return needle;
+          return null;
+        }),
+      };
+      const figure = {
+        querySelector: vi.fn((sel: string) => {
+          if (sel === '[data-rubik-stage]') return stage;
+          if (sel === '[data-readout]') return readout;
+          return null;
+        }),
+      };
+      const root = {
+        querySelectorAll: vi.fn(() => [figure]),
+      } as unknown as ParentNode;
+
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn(() => ({ matches: false })),
+      );
+      let rafCalled = false;
+      vi.stubGlobal(
+        'requestAnimationFrame',
+        vi.fn(() => {
+          rafCalled = true;
+          return 1;
+        }),
+      );
+
+      initRubikCube(root);
+
+      const enterDown = { key: 'Enter', preventDefault: vi.fn() };
+      listeners.keydown?.[0]?.(enterDown);
+      expect(enterDown.preventDefault).toHaveBeenCalled();
+      expect(rafCalled).toBe(true);
 
       vi.unstubAllGlobals();
     });
