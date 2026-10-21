@@ -89,7 +89,10 @@ const navItems = [
 
 <style>
     .site-header {
-        position: relative;
+        position: sticky;
+        top: 0;
+        z-index: 90;
+        background-color: var(--colors-background);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -150,9 +153,6 @@ const navItems = [
     /* Mobile view (< 640px) */
     @media (max-width: 639px) {
         .site-header {
-            position: relative;
-            z-index: 90;
-            background-color: var(--colors-background);
             flex-wrap: nowrap;
             padding-block: 12px;
         }

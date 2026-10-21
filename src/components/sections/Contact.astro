@@ -286,7 +286,7 @@ const contact = lang === 'es' ? esContact : enContact;
 
   .resume-actions {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 12px;
   }
 
@@ -309,9 +309,10 @@ const contact = lang === 'es' ? esContact : enContact;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    padding: 0;
+    min-width: 44px;
+    min-height: 44px;
+    aspect-ratio: 1 / 1;
+    padding: 10px 14px;
     flex-shrink: 0;
     text-decoration: none;
   }
@@ -319,6 +320,7 @@ const contact = lang === 'es' ? esContact : enContact;
   .resume-arrow {
     font-family: var(--font-mono-console);
     font-size: 1.1rem;
+    line-height: 1;
     color: var(--colors-primary-light);
     margin-left: 2px;
     transition:
@@ -359,7 +361,7 @@ const contact = lang === 'es' ? esContact : enContact;
     }
 
     .resume-download-btn {
-      flex: 0 0 44px;
+      flex: 0 0 auto;
     }
   }
 </style>
