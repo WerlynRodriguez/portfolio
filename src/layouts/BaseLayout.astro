@@ -14,7 +14,14 @@ const lang = Astro.props.lang ?? resolveLocale(Astro.currentLocale);
 const t = useTranslations(lang);
 const title = Astro.props.title ?? t('meta.title');
 const description = Astro.props.description ?? t('meta.description');
-const skipLabel = t('skip.link');
+
+const siteUrl = Astro.site ?? new URL('https://werlyn.dev');
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const ogImageURL = new URL('/og.png', siteUrl);
+const enURL = new URL('/', siteUrl);
+const esURL = new URL('/es/', siteUrl);
+const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
+const ogAlternateLocale = lang === 'es' ? 'en_US' : 'es_ES';
 ---
 
 <!doctype html>
@@ -23,6 +30,45 @@ const skipLabel = t('skip.link');
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta id="cs" name="color-scheme" content="light dark" />
+
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="author" content="Werlyn Rodríguez" />
+        <meta name="robots" content="index, follow" />
+        <meta name="generator" content={Astro.generator} />
+
+        <!-- Canonical & Alternates -->
+        <link rel="canonical" href={canonicalURL.href} />
+        <link rel="alternate" hreflang="en" href={enURL.href} />
+        <link rel="alternate" hreflang="es" href={esURL.href} />
+        <link rel="alternate" hreflang="x-default" href={enURL.href} />
+
+        <!-- Open Graph Protocol (Facebook, WhatsApp, LinkedIn, Discord) -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Werlyn" />
+        <meta property="og:url" content={canonicalURL.href} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImageURL.href} />
+        <meta property="og:image:secure_url" content={ogImageURL.href} />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={title} />
+        <meta property="og:locale" content={ogLocale} />
+        <meta property="og:locale:alternate" content={ogAlternateLocale} />
+
+        <!-- Twitter / X Cards -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={canonicalURL.href} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageURL.href} />
+        <meta name="twitter:image:alt" content={title} />
+
+        <!-- Favicons -->
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
 
         <script is:inline>
             (function () {
@@ -74,12 +120,6 @@ const skipLabel = t('skip.link');
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;800&family=Roboto+Mono:wght@400;500&family=Share+Tech+Mono&display=swap"
             rel="stylesheet"
         />
-
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="generator" content={Astro.generator} />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="icon" href="/favicon.ico" />
     </head>
     <body>
         <Header lang={lang} />
