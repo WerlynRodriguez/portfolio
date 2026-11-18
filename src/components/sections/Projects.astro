@@ -139,6 +139,19 @@ const projects = rawProjects.sort(
                                         </span>
                                     </div>
                                 )}
+                                {project.data.status && (
+                                    <div class="panel-achievement-badge">
+                                        <span class="achievement-text">
+                                            {project.data.status}
+                                        </span>
+                                        <span
+                                            class="status-cursor"
+                                            aria-hidden="true"
+                                        >
+                                            █
+                                        </span>
+                                    </div>
+                                )}
                             </figure>
 
                             {/* Panel Header */}
@@ -547,6 +560,29 @@ const projects = rawProjects.sort(
     .achievement-star {
         color: var(--colors-punctual);
         font-size: 0.95rem;
+    }
+
+    .status-cursor {
+        color: var(--colors-punctual);
+        font-size: 0.85em;
+        line-height: 1;
+        animation: terminal-blink 1s step-end infinite;
+    }
+
+    @keyframes terminal-blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .status-cursor {
+            animation: none;
+        }
     }
 
     /* Panel Header */

@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 3
 title: ChallengeDay
 subtitle: Frontend competition prototype
 description: Frontend prototype developed in 1 day for a competition organized by RedSofa.

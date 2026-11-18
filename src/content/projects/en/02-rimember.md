@@ -1,5 +1,5 @@
 ---
-order: 1
+order: 2
 title: Rimember
 subtitle: Media playback app for Android
 description: Android app for shuffle playback of photos and videos from the user's gallery.

@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 3
 title: ChallengeDay
 subtitle: Prototipo para competencia frontend
 description: Prototipo frontend desarrollado en 1 día para competencia organizada por RedSofa.

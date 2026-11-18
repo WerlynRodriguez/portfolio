@@ -14,6 +14,7 @@ const projects = defineCollection({
       primaryTech: z.array(z.string()).default([]),
       secondaryTech: z.array(z.string()).default([]),
       achievement: z.string().optional(),
+      status: z.string().optional(),
       image: image().optional(),
       imageAlt: z.string().optional(),
       repoUrl: z.url().optional(),

@@ -1,5 +1,5 @@
 ---
-order: 3
+order: 4
 title: Bancopoly
 subtitle: Juego multijugador de gestión de propiedades
 description: Juego de mesa multijugador enfocado en gestión financiera y de propiedades.

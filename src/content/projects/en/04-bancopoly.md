@@ -1,5 +1,5 @@
 ---
-order: 3
+order: 4
 title: Bancopoly
 subtitle: Multiplayer property trading game
 description: Multiplayer property trading game focused on financial management and properties.
